@@ -23,3 +23,35 @@ jobs:
         
       - name: Run Tests
         run: dotnet test "server/OnionArchitecture.sln"
+
+  delivery:
+    runs-on: ubuntu-latest
+    needs: run-tests
+    permissions:
+      # contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate results of code analysis
+      
+      # Log in to GitHub Container Registry (GHCR)
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build the Docker image
+      - name: Build and Push Docker image (SSD-Findings-Project)
+        run: |
+          IMAGE="ghcr.io/${{ github.repository_owner }}/ssd-findings-project"
+          IMAGE="${IMAGE,,}"
+          docker build \
+            -t "${IMAGE}:${{ github.sha }}" \
+            -f server/Startup/Dockerfile \
+            server
+          docker push "${IMAGE}:${{ github.sha }}"

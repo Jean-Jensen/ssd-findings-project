@@ -41,13 +41,29 @@ CREATE TABLE findings
 (
     findingid     text     NOT NULL,
     creatorid     text,
-    assignedid    text,
     details       text     NOT NULL,
     severity      severity NOT NULL,
     discoverydate DATE NOT NULL,
     status        status   NOT NULL,
-    CONSTRAINT findings_fk PRIMARY KEY (findingid),
+    CONSTRAINT findings_pk PRIMARY KEY (findingid),
 );
+
+/* to allow multiple users to be assigned to a finding */
+CREATE TABLE userFindings(
+    assignedid    text,
+    findingid     text,
+
+    CONSTRAINT findings_userfindings_fk FOREIGN KEY (findingid) REFERENCES "findings" (findingid),
+    CONSTRAINT user_userfindings_fk FOREIGN KEY (assignedid) REFERENCES "userLink" (userid),
+
+)
+
+/* to link to keycloak users */
+CREATE TABLE userLink(
+    userid text,
+    email text,
+    
+)
 
 
 
