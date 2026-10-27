@@ -1,11 +1,14 @@
 using Api.Rest.AuthExtensions;
 using Application.Interfaces;
 using Application.Models.Dtos.Auth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Rest.Controllers;
 
 [ApiController]
+//[RequiredScope(RequiredScopesConfigurationKey = "OpenIDConnectSettings")]
 public class AuthController(ISecurityService securityService) : ControllerBase
 {
     public const string ControllerRoute = "api/auth/";
@@ -13,12 +16,16 @@ public class AuthController(ISecurityService securityService) : ControllerBase
     public const string RegisterRoute = ControllerRoute + nameof(Register);
     public const string SecuredRoute = ControllerRoute + nameof(Secured);
 
-
-    [HttpPost]
-    [Route(LoginRoute)]
-    public ActionResult<AuthResponseDto> Login([FromBody] AuthRequestDto dto)
+    
+    [HttpGet(LoginRoute)]
+    public async Task Login([FromServices] IConfiguration config)
     {
-        return Ok(securityService.Login(dto));
+        await HttpContext.ChallengeAsync(
+          OpenIdConnectDefaults.AuthenticationScheme,
+          new AuthenticationProperties
+          {
+              RedirectUri = config.GetSection("OpenIDConnectSettings")["Frontend"]
+          });
     }
 
     [HttpPost]
