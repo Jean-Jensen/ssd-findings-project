@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet(UserInfoRoute)]
-    public ActionResult GetUserInfo()
+    public ActionResult<UserModel> GetUserInfo()
     {
         var user = this.HttpContext.User;
 
