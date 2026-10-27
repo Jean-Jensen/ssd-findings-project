@@ -1,6 +1,4 @@
-using Application.Interfaces.Infrastructure.Postgres;
 using Application;
-using Infrastructure.PostGres.PostgresSQL.Data;
 using Infrastructure.Postgres.Scaffolding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +18,6 @@ public static class InfrastructurePostgresExtensions
             options.EnableSensitiveDataLogging();
         });
 
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<Seeder>();
 
         return services;

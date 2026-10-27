@@ -10,6 +10,7 @@ public static class RestStartupExtensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
+        services.AddCors();
 
         var controllersAssembly = typeof(RestStartupExtensions).Assembly;
 
@@ -21,7 +22,11 @@ public static class RestStartupExtensions
     {
         app.UseExceptionHandler();
         app.MapControllers();
-        app.UseCors(opts => opts.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        app.UseCors(opts => opts
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
         return app;
     }
 }

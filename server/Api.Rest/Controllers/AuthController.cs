@@ -1,6 +1,5 @@
-using Api.Rest.AuthExtensions;
-using Application.Interfaces;
-using Application.Models.Dtos.Auth;
+using System.Security.Claims;
+using Core.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Rest.Controllers;
 
 [ApiController]
-//[RequiredScope(RequiredScopesConfigurationKey = "OpenIDConnectSettings")]
-public class AuthController(ISecurityService securityService) : ControllerBase
+public class AuthController : ControllerBase
 {
     public const string ControllerRoute = "api/auth/";
     public const string LoginRoute = ControllerRoute + nameof(Login);
-    public const string RegisterRoute = ControllerRoute + nameof(Register);
-    public const string SecuredRoute = ControllerRoute + nameof(Secured);
+    public const string CallbackRoute = ControllerRoute + nameof(Callback);
+    public const string UserInfoRoute = ControllerRoute + "UserInfo";
 
     
     [HttpGet(LoginRoute)]
@@ -27,19 +25,33 @@ public class AuthController(ISecurityService securityService) : ControllerBase
               RedirectUri = config.GetSection("OpenIDConnectSettings")["Frontend"]
           });
     }
-
-    [HttpPost]
-    [Route(RegisterRoute)]
-    public ActionResult<AuthResponseDto> Register([FromBody] AuthRequestDto dto)
+    
+    [HttpGet(CallbackRoute)]
+    public async Task Callback()
     {
-        return Ok(securityService.Register(dto));
+        await HttpContext.AuthenticateAsync();
     }
 
-    [HttpGet]
-    [Route(SecuredRoute)]
-    public ActionResult Secured()
+    [HttpGet(UserInfoRoute)]
+    public ActionResult GetUserInfo()
     {
-        securityService.VerifyJwtOrThrow(HttpContext.GetJwt());
-        return Ok("You are authorized to see this message");
+        var user = this.HttpContext.User;
+
+        if (user?.Identity != null && user.Identity.IsAuthenticated)
+        {
+            return this.Ok(new UserModel
+            {
+                IsAuthenticated = true,
+                Name = user.FindFirst("name")?.Value,
+                EmailAddress = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value,
+                AdditionalClaims = user.Identities.First().Claims.ToDictionary(claim => claim.Type, claim => claim.Value)
+            });
+        }
+
+        return this.Ok(new UserModel
+        {
+            IsAuthenticated = false,
+        });
     }
+    
 }
