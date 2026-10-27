@@ -16,20 +16,21 @@ public class Program
     public static async Task Main()
     {
         var builder = WebApplication.CreateBuilder();
-        ConfigureServices(builder.Services);
+        ConfigureServices(builder.Services, builder.Configuration);
         ConfigureOIDCServices(builder.Services, builder.Configuration);
         var app = builder.Build();
         await ConfigureMiddleware(app);
-
         app.UseAuthorization();
         await app.RunAsync();
     }
 
-    public static void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAppOptions(configuration);
         services.RegisterApplicationServices();
         services.AddDataSourceAndRepositories();
         services.RegisterRestApiServices();
+        services.AddOpenApiDocument();
     }
     
     public static void ConfigureOIDCServices(IServiceCollection services, IConfiguration configuration)
@@ -47,7 +48,7 @@ public class Program
             options.Authority = oidcConfig["Authority"];
             options.ClientId = oidcConfig["ClientId"];
             options.ClientSecret = oidcConfig["ClientSecret"];
-            options.CallbackPath = oidcConfig["/Auth/Callback"];
+            options.CallbackPath = oidcConfig["CallbackPath"];
             options.RequireHttpsMetadata = false;
             
             

@@ -12,11 +12,15 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Infrastructure.Postgres\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UserSecretsId>98dcd66c-fdcc-4fb2-a168-2f704f8fcb96</UserSecretsId>
   </PropertyGroup>
 
 </Project>
