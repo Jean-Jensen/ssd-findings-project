@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Api.Rest;
 using Application;
+using Application.Models.Constants;
 using Infrastructure.PostGres;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -58,7 +59,7 @@ public class Program
             options.Scope.Add("email");
             
             options.TokenValidationParameters.NameClaimType = "name";
-            options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
+            options.TokenValidationParameters.RoleClaimType = "app_roles";
 
             options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
             options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -73,7 +74,7 @@ public class Program
             options.SaveTokens = true;
         });
         
-        services.AddAuthorization();
+        ConfigurePolicies(services);
     }
 
     public static async Task ConfigureMiddleware(WebApplication app)
@@ -95,11 +96,30 @@ public class Program
         app.MapGet("Acceptance", () => "Accepted");
         
         app.UseOpenApi(conf => { conf.Path = "openapi/v1.json"; });
+        
+        app.UseSwaggerUi(settings =>
+        {
+            settings.Path = "/swagger";
+            settings.DocumentPath = "/openapi/v1.json";
+        });
 
         var document = await app.Services.GetRequiredService<IOpenApiDocumentGenerator>().GenerateAsync("v1");
         var json = document.ToJson();
         await File.WriteAllTextAsync("openapi.json", json);
         
         app.GenerateTypeScriptClient("/../../client/src/generated-client.ts").GetAwaiter().GetResult();
+    }
+
+    public static void ConfigurePolicies(IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(PolicyConstants.CanUpdateFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(
+                        RoleConstants.Analyst,
+                        RoleConstants.Developer,
+                        RoleConstants.PM));
+        });
     }
 }
