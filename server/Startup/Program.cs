@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Api.Rest;
+﻿using Api.Rest;
 using Application;
 using Application.Models.Constants;
 using Infrastructure.PostGres;

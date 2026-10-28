@@ -18,6 +18,9 @@ public static class InfrastructurePostgresExtensions
             options.EnableSensitiveDataLogging();
         });
 
+        // here you can register your application repositories, for example:
+        // services.AddScoped<IMyRepository, MyRepository>();
+        
         services.AddScoped<Seeder>();
 
         return services;
