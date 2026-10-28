@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
 
         if (user?.Identity != null && user.Identity.IsAuthenticated)
         {
-            return this.Ok(new UserModel
+            return Ok(new UserModel
             {
                 IsAuthenticated = true,
                 Name = user.FindFirst("name")?.Value,
@@ -60,7 +60,7 @@ public class AuthController : ControllerBase
             });
         }
         
-        return this.Ok(new UserModel
+        return Ok(new UserModel
         {
             IsAuthenticated = false,
         });
