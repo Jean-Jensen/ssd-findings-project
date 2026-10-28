@@ -1,10 +1,11 @@
 using System.Security.Claims;
+using Application.Models.Constants;
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Rest.Controllers;
+namespace Api.Rest.Controllers.Auth;
 
 [ApiController]
 public class AuthController : ControllerBase
@@ -35,7 +36,18 @@ public class AuthController : ControllerBase
     [HttpGet(UserInfoRoute)]
     public ActionResult<UserModel> GetUserInfo()
     {
-        var user = this.HttpContext.User;
+        var user = HttpContext.User;
+
+        // Logs for testing
+        Console.WriteLine($"Authenticated: {user.Identity?.IsAuthenticated}");
+
+        foreach (var claim in user.Claims)
+        {
+            Console.WriteLine($"{claim.Type}: {claim.Value}");
+        }
+        
+        Console.WriteLine("Correct Role?: " + user.IsInRole(RoleConstants.Auditor));
+        // Logs for testing
 
         if (user?.Identity != null && user.Identity.IsAuthenticated)
         {
@@ -47,7 +59,7 @@ public class AuthController : ControllerBase
                 AdditionalClaims = user.Identities.First().Claims.ToDictionary(claim => claim.Type, claim => claim.Value)
             });
         }
-
+        
         return this.Ok(new UserModel
         {
             IsAuthenticated = false,
