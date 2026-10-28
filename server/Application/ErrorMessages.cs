@@ -1,6 +1,5 @@
 namespace Application;
 
-
 public enum ErrorCode
 {
     ErrorUserId,
