@@ -12,6 +12,12 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Infrastructure.Postgres\" />
+    <Folder Include="Models\Dtos\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

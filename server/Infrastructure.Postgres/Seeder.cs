@@ -1,11 +1,9 @@
-using Application;
 using Infrastructure.Postgres.Scaffolding;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.PostGres;
 
-public class Seeder(AppDbContext context, IOptionsMonitor<AppOptions> optionsMonitor) : ISeeder
+public class Seeder(AppDbContext context) : ISeeder
 {
     public async Task Seed()
     {

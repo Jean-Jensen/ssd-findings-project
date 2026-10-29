@@ -1,34 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import { AuthClient } from './generated-client'
+import type { UserModel } from './generated-client'
 import './App.css'
 
+const apiUrl = 'http://localhost:5001'
+
+const authClient = new AuthClient(apiUrl, {
+  fetch: (url, options) =>
+    window.fetch(url, { ...options, credentials: 'include' }),
+})
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState<UserModel | null>(null)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    let active = true
+
+    authClient.getUserInfo()
+      .then(result => {
+        if (active) setUser(result)
+      })
+      .catch(() => {
+        if (active) setError(true)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  if (error) return <p>Could not check login status.</p>
+  if (!user) return <p>Checking login…</p>
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="card">
+      {user.isAuthenticated ? (
+        <>
+          <h1>Welcome, {user.name || user.emailAddress || 'user'}</h1>
+          <p>You are logged in.</p>
+        </>
+      ) : (
+        <button
+          onClick={() => {
+            window.location.href = `${apiUrl}/api/auth/Login`
+          }}
+        >
+          Login
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      )}
+    </div>
   )
 }
 

@@ -7,13 +7,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>98dcd66c-fdcc-4fb2-a168-2f704f8fcb96</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Postgres\Infrastructure.Postgres.csproj" />
     <ProjectReference Include="..\Api.Rest\Api.Rest.csproj" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
     <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.2.0" />
   </ItemGroup>
