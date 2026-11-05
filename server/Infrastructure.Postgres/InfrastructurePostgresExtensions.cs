@@ -1,4 +1,6 @@
 using Application;
+using Application.Interfaces;
+using Infrastructure.Postgres.Repositories;
 using Infrastructure.Postgres.Scaffolding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,7 @@ public static class InfrastructurePostgresExtensions
         // services.AddScoped<IMyRepository, MyRepository>();
         
         services.AddScoped<Seeder>();
+        services.AddScoped<IFindingRepository, FindingRepository>();
 
         return services;
     }

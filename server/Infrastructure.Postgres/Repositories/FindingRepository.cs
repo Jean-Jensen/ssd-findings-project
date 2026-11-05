@@ -1,8 +1,10 @@
-﻿using Application.Interfaces;
+﻿
+using Application.Interfaces;
 using Core.Domain.Entities;
+using Infrastructure.Postgres.Scaffolding;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Postgres.Scaffolding.Repositories;
+namespace Infrastructure.Postgres.Repositories;
 
 public class FindingRepository(AppDbContext context) : IFindingRepository
 {

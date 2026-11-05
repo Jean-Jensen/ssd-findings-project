@@ -3,7 +3,7 @@ using Core.Domain.Entities;
 
 namespace Application.Services;
 
-public class FindingService(IFindingRepository findRepo)
+public class FindingService(IFindingRepository findRepo) : IFindingService
 {
     public async Task<Finding> GetFindingWithId(Guid id)
     {

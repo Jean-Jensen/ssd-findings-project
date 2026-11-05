@@ -347,6 +347,7 @@
         "type": "Project",
         "dependencies": {
           "Core.Domain": "[1.0.0, )",
+          "Infrastructure.Postgres.Scaffolding": "[1.0.0, )",
           "JWT": "[11.0.0, )"
         }
       },
