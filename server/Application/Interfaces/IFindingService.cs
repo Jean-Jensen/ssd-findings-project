@@ -4,7 +4,7 @@ namespace Application.Interfaces;
 
 public interface IFindingService
 {
-    public Task<Finding> GetFindingWithId(Guid id);
+    public Task<Finding?> GetFindingWithId(Guid id);
 
     public Task<bool> AddFinding(Finding finding);
 

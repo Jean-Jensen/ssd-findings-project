@@ -14,6 +14,10 @@ public class FindingController(IFindingService service) : ControllerBase
     public async Task<ActionResult<Finding>> GetFindingWithId([FromRoute] Guid id)
     {
         var result = await service.GetFindingWithId(id);
+        if (result == null)
+        {
+            return BadRequest("The finding your looking for doesn't exist");
+        }
         return Ok(result);
     }
 

@@ -5,7 +5,7 @@ namespace Application.Services;
 
 public class FindingService(IFindingRepository findRepo) : IFindingService
 {
-    public async Task<Finding> GetFindingWithId(Guid id)
+    public async Task<Finding?> GetFindingWithId(Guid id)
     {
         return await findRepo.GetFindingWithId(id);
     }
