@@ -6,6 +6,102 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/{id}": {
+      "get": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_GetFindingWithId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Finding"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/add": {
+      "post": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_AddFinding",
+        "requestBody": {
+          "x-name": "finding",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finding"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finding/update": {
+      "patch": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_UpdateFinding",
+        "requestBody": {
+          "x-name": "finding",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finding"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/test": {
       "get": {
         "tags": [
@@ -76,6 +172,51 @@
   },
   "components": {
     "schemas": {
+      "Finding": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "findingid": {
+            "type": "string"
+          },
+          "creatorid": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string"
+          },
+          "discoverydate": {
+            "type": "string",
+            "format": "date"
+          },
+          "assigneds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Userlink"
+            }
+          }
+        }
+      },
+      "Userlink": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userid": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          }
+        }
+      },
       "UserModel": {
         "type": "object",
         "additionalProperties": false,
