@@ -177,6 +177,7 @@
       "infrastructure.postgres.scaffolding": {
         "type": "Project",
         "dependencies": {
+          "Application": "[1.0.0, )",
           "Core.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore.Relational": "[9.0.3, )",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[9.0.3, )",
