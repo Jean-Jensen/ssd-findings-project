@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+.sideways-div{
+  flex-direction: row;
+}
+
+.external-login-div{
+  flex-direction: column;
+  margin-bottom: 20px;
+  
+}

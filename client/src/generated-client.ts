@@ -19,7 +19,7 @@ export class FindingClient {
     }
 
     getFindingWithId(id: string): Promise<Finding> {
-        let url_ = this.baseUrl + "/{id}";
+        let url_ = this.baseUrl + "/api/finding/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -55,7 +55,7 @@ export class FindingClient {
     }
 
     addFinding(finding: Finding): Promise<boolean> {
-        let url_ = this.baseUrl + "/add";
+        let url_ = this.baseUrl + "/api/finding/add";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(finding);

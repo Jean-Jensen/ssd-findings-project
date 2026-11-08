@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/{id}": {
+    "/api/finding/{id}": {
       "get": {
         "tags": [
           "Finding"
@@ -38,7 +38,7 @@
         }
       }
     },
-    "/add": {
+    "/api/finding/add": {
       "post": {
         "tags": [
           "Finding"

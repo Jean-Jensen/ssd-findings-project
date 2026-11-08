@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Rest.Controllers;
 
 
-[Route("api/finding")]
+[Route(ControllerRoute)]
 [ApiController]
 public class FindingController(IFindingService service) : ControllerBase
 {
-    [HttpGet("/{id}")]
+    public const string ControllerRoute = "api/finding/";
+    
+    [HttpGet("{id}")]
     public async Task<ActionResult<Finding>> GetFindingWithId([FromRoute] Guid id)
     {
         var result = await service.GetFindingWithId(id);
@@ -21,7 +23,7 @@ public class FindingController(IFindingService service) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("/add")]
+    [HttpPost("add")]
     public async Task<ActionResult<bool>> AddFinding([FromBody] Finding finding)
     { 
         await service.AddFinding(finding);
