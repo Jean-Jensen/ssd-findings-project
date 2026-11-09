@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models.Dtos;
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,10 @@ public class FindingController(IFindingService service) : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult<bool>> AddFinding([FromBody] Finding finding)
+    public async Task<ActionResult<bool>> AddFinding([FromBody] FindingDto finding)
     { 
-        await service.AddFinding(finding);
+        Console.WriteLine(finding);
+        await service.AddFinding(FindingDto.ToFinding(finding));
         return Created();
     }
 

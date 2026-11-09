@@ -49,7 +49,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Finding"
+                "$ref": "#/components/schemas/FindingDto"
               }
             }
           },
@@ -214,6 +214,26 @@
             "items": {
               "$ref": "#/components/schemas/Finding"
             }
+          }
+        }
+      },
+      "FindingDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "findingid": {
+            "type": "string"
+          },
+          "creatorid": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string"
+          },
+          "discoverydate": {
+            "type": "string",
+            "format": "date"
           }
         }
       },

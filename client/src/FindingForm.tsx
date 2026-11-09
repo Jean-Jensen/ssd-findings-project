@@ -1,5 +1,5 @@
 ﻿import {useState} from "react";
-import {Finding, FindingClient} from "./generated-client.ts";
+import {FindingClient, FindingDto} from "./generated-client.ts";
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
 /*import {useAtom} from "jotai";
@@ -12,6 +12,11 @@ const findingClient = new FindingClient(apiUrl, {
         return window.fetch(url, {...init});
     }
 });
+/*
+const findingClient = new FindingClient(apiUrl, {
+    fetch: (url, options) =>
+        window.fetch(url, { ...options, credentials: 'include' }),
+})*/
 
 export default function Findingform(){
     
@@ -23,10 +28,10 @@ export default function Findingform(){
         let userId = user!.additionalClaims!["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
         console.log("user ID: " + userId);
         
-        let finding : Finding = {
+        let finding : FindingDto = {
             findingid: crypto.randomUUID(),
             details: findingDetails,
-            discoverydate : new Date(),
+            discoverydate : new Date("2026-11-09").,
             creatorid: userId
         }
         
@@ -35,7 +40,9 @@ export default function Findingform(){
     }
     
     async function createFinding(){
-        let finding: Finding = createFindingObject();
+        let finding: FindingDto = createFindingObject();
+        
+        console.log(finding);
         
         await findingClient.addFinding(finding).then().catch();
         

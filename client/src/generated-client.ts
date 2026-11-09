@@ -54,7 +54,7 @@ export class FindingClient {
         return Promise.resolve<Finding>(null as any);
     }
 
-    addFinding(finding: Finding): Promise<boolean> {
+    addFinding(finding: FindingDto): Promise<boolean> {
         let url_ = this.baseUrl + "/api/finding/add";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -294,6 +294,13 @@ export interface Userlink {
     userid?: string;
     email?: string | undefined;
     findings?: Finding[];
+}
+
+export interface FindingDto {
+    findingid?: string;
+    creatorid?: string | undefined;
+    details?: string;
+    discoverydate?: Date;
 }
 
 export interface UserModel {
