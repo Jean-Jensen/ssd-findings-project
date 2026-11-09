@@ -1,5 +1,7 @@
 ﻿import {useState} from "react";
 import {Finding, FindingClient} from "./generated-client.ts";
+import {useAtom} from "jotai";
+import {userAtom} from "./atoms.ts";
 /*import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";*/
 
@@ -14,15 +16,18 @@ const findingClient = new FindingClient(apiUrl, {
 export default function Findingform(){
     
     const [findingDetails, setFindingDetails] = useState("");
-    //const [user] = useAtom(userAtom)
+    const [user] = useAtom(userAtom)
     
     function createFindingObject(){
+        
+        let userId = user!.additionalClaims!["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        console.log("user ID: " + userId);
         
         let finding : Finding = {
             findingid: crypto.randomUUID(),
             details: findingDetails,
             discoverydate : new Date(),
-            creatorid: "9f2aa213-d707-41f6-a220-84925fb0c55a" //temporary ID
+            creatorid: userId
         }
         
         return finding
