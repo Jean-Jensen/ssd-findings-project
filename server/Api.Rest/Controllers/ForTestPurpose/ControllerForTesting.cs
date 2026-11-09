@@ -8,12 +8,9 @@ namespace Api.Rest.Controllers.ForTestPurpose;
 [Route("api/test")]
 public class ControllerForTesting : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("update-findings")]
     [Authorize(Policy = PolicyConstants.CanUpdateFindings)]
-    public IActionResult Get()
-    {
-        return Ok("Test endpoint is working.");
-    }
+    public IActionResult Get() => Ok(PolicyConstants.CanUpdateFindings);
 
     [HttpGet("view-findings")]
     [Authorize(Policy = PolicyConstants.CanViewFindings)]
