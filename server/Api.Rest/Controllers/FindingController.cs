@@ -29,7 +29,7 @@ public class FindingController(IFindingService service) : ControllerBase
     { 
         Console.WriteLine(finding);
         await service.AddFinding(FindingDto.ToFinding(finding));
-        return Created();
+        return Ok();
     }
 
     [HttpPatch("update")]

@@ -43,7 +43,7 @@ export default function Findingform(){
         
         console.log(finding);
         
-        await findingClient.addFinding(finding).then().catch();
+        await findingClient.addFinding(finding);
         
     }
     

@@ -61,7 +61,7 @@ function App() {
               <p>not a member of this organization? submit form here</p>
               <button onClick={() => {
                 window.location.href = window.location.href + `/FindingForm`
-              }}></button>
+              }}>To external form</button>
             </div>
             
           </div>
