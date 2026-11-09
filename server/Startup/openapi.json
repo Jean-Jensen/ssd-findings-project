@@ -230,10 +230,6 @@
           },
           "details": {
             "type": "string"
-          },
-          "discoverydate": {
-            "type": "string",
-            "format": "date"
           }
         }
       },

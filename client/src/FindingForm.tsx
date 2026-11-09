@@ -31,7 +31,6 @@ export default function Findingform(){
         let finding : FindingDto = {
             findingid: crypto.randomUUID(),
             details: findingDetails,
-            discoverydate : new Date("2026-11-09").,
             creatorid: userId
         }
         

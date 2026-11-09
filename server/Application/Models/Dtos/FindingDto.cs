@@ -10,7 +10,6 @@ public class FindingDto
 
     public string Details { get; set; } = null!;
 
-    public DateOnly Discoverydate { get; set; }
 
     public static Finding ToFinding(FindingDto finding)
     {
@@ -18,7 +17,7 @@ public class FindingDto
         {
             Findingid = finding.Findingid,
             Creatorid = finding.Creatorid,
-            Discoverydate = finding.Discoverydate,
+            Discoverydate = DateOnly.FromDateTime(DateTime.Today),
             Details = finding.Details
 
         };

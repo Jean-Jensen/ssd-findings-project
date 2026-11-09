@@ -300,7 +300,6 @@ export interface FindingDto {
     findingid?: string;
     creatorid?: string | undefined;
     details?: string;
-    discoverydate?: Date;
 }
 
 export interface UserModel {
