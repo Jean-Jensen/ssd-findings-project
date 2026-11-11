@@ -24,6 +24,8 @@ jobs:
         run: dotnet test "server/OnionArchitecture.sln"
 
   delivery:
+    # this "if" makes the delivery job run only on pushes to the main branch (when the PR is merged and not when it's created)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
     runs-on: ubuntu-latest
     needs: run-tests
     permissions:
