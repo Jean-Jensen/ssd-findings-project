@@ -347,6 +347,7 @@
         "type": "Project",
         "dependencies": {
           "Core.Domain": "[1.0.0, )",
+          "Infrastructure.Postgres.Scaffolding": "[1.0.0, )",
           "JWT": "[11.0.0, )"
         }
       },
@@ -364,6 +365,7 @@
       "infrastructure.postgres.scaffolding": {
         "type": "Project",
         "dependencies": {
+          "Application": "[1.0.0, )",
           "Core.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore.Relational": "[9.0.3, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[9.0.4, )"

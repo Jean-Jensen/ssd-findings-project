@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure.Postgres.Scaffolding\Infrastructure.Postgres.Scaffolding.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,8 +15,6 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\Infrastructure.Postgres\" />
-    <Folder Include="Models\Dtos\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <PropertyGroup>
