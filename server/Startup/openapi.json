@@ -27,6 +27,111 @@
         }
       }
     },
+    "/api/test/view-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_ViewFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/create-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_CreateFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/assign-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_AssignFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/set-sla-targets": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_SetSlaTargets",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/manage-user-roles": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_ManageUserRoles",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/Login": {
       "get": {
         "tags": [
