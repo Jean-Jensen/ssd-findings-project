@@ -6,6 +6,27 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/temp-audit-test": {
+      "get": {
+        "tags": [
+          "TempAuditTest"
+        ],
+        "operationId": "TempAuditTest_Run",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/test": {
       "get": {
         "tags": [
