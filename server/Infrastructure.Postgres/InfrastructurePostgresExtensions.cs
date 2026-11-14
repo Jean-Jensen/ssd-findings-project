@@ -1,5 +1,7 @@
 using Application;
+using Application.Interfaces;
 using Infrastructure.Postgres.Scaffolding;
+using Infrastructure.PostGres.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -20,6 +22,9 @@ public static class InfrastructurePostgresExtensions
 
         // here you can register your application repositories, for example:
         // services.AddScoped<IMyRepository, MyRepository>();
+        
+        
+        services.AddScoped<IAuditLogService, AuditLogService>();
         
         services.AddScoped<Seeder>();
 
