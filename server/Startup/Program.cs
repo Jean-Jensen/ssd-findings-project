@@ -113,12 +113,36 @@ public class Program
     {
         services.AddAuthorization(options =>
         {
+            options.AddPolicy(PolicyConstants.CanViewFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(
+                        RoleConstants.Analyst,
+                        RoleConstants.Developer,
+                        RoleConstants.PM,
+                        RoleConstants.Auditor));
+
+            options.AddPolicy(PolicyConstants.CanCreateFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.Analyst, RoleConstants.PM));
+
             options.AddPolicy(PolicyConstants.CanUpdateFindings, policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireRole(
                         RoleConstants.Analyst,
                         RoleConstants.Developer,
                         RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanAssignFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.Analyst, RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanSetSlaTargets, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanManageUserRoles, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM));
         });
     }
 }
