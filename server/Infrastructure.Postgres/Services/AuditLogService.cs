@@ -12,8 +12,7 @@ public class AuditLogService(AppDbContext db) : IAuditLogService
         string? fieldName = null, string? oldValue = null, string? newValue = null)
     {
         // details may be encrypted (FIND-11), so never store its old/new text in the log
-        if (fieldName == DetailsField)
-        {
+        if (string.Equals(fieldName, DetailsField, StringComparison.OrdinalIgnoreCase))        {
             oldValue = null;
             newValue = null;
         }
