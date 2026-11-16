@@ -6,7 +6,28 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/test": {
+    "/api/temp-audit-test": {
+      "get": {
+        "tags": [
+          "TempAuditTest"
+        ],
+        "operationId": "TempAuditTest_Run",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/update-findings": {
       "get": {
         "tags": [
           "ControllerForTesting"
@@ -132,6 +153,26 @@
         }
       }
     },
+    "/api/dashboard/Summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "operationId": "Dashboard_GetSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/Login": {
       "get": {
         "tags": [
@@ -181,6 +222,41 @@
   },
   "components": {
     "schemas": {
+      "DashboardSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalOpen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bySeverity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DashboardCount"
+            }
+          },
+          "byStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DashboardCount"
+            }
+          }
+        }
+      },
+      "DashboardCount": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "UserModel": {
         "type": "object",
         "additionalProperties": false,
