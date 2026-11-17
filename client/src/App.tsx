@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react'
-import { AuthClient } from './generated-client'
+import { apiUrl, authClient } from './api'
 import type { UserModel } from './generated-client'
+import UserRolesPage from './UserRolesPage'
 import './App.css'
 
-const apiUrl = 'http://localhost:5001'
-
-const authClient = new AuthClient(apiUrl, {
-  fetch: (url, options) =>
-    window.fetch(url, { ...options, credentials: 'include' }),
-})
+const userRolesPath = '/user-roles'
 
 function App() {
   const [user, setUser] = useState<UserModel | null>(null)
@@ -33,12 +29,24 @@ function App() {
   if (error) return <p>Could not check login status.</p>
   if (!user) return <p>Checking login…</p>
 
+  const canManageRoles = user.isAuthenticated && user.additionalClaims?.app_roles === 'PM'
+
+  if (window.location.pathname === userRolesPath) {
+    return canManageRoles ? <UserRolesPage /> : (
+      <main>
+        <p>Only project managers can manage user roles.</p>
+        <a href="/">Back to home</a>
+      </main>
+    )
+  }
+
   return (
     <div className="card">
       {user.isAuthenticated ? (
         <>
           <h1>Welcome, {user.name || user.emailAddress || 'user'}</h1>
           <p>You are logged in.</p>
+          {canManageRoles && <a className="user-roles-link" href={userRolesPath}>Manage user roles</a>}
         </>
       ) : (
         <button

@@ -27,6 +27,96 @@
         }
       }
     },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ListManagedUsers",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "maximum": 2147483647.0,
+              "minimum": 0.0
+            },
+            "x-position": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "maximum": 100.0,
+              "minimum": 1.0
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedUsersPageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{userId}/role": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ChangeUserRole",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUserRoleDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/test/update-findings": {
       "get": {
         "tags": [
@@ -222,6 +312,48 @@
   },
   "components": {
     "schemas": {
+      "ManagedUsersPageDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedUserDto"
+            }
+          },
+          "hasMore": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ManagedUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChangeUserRoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string"
+          }
+        }
+      },
       "DashboardSummary": {
         "type": "object",
         "additionalProperties": false,

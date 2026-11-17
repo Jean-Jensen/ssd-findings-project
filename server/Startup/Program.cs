@@ -1,6 +1,8 @@
 ﻿using Api.Rest;
 using Application;
+using Application.Interfaces;
 using Application.Models.Constants;
+using Infrastructure.Keycloak;
 using Infrastructure.PostGres;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -28,6 +30,18 @@ public class Program
     {
         services.AddAppOptions(configuration);
         services.RegisterApplicationServices();
+        services.AddSingleton(new KeycloakAdminOptions(
+            configuration["OpenIDConnectSettings:Authority"],
+            configuration["OpenIDConnectSettings:ClientId"],
+            configuration["KeycloakAdmin:ClientId"] ?? "auth04-role-manager",
+            configuration["KeycloakAdmin:ClientSecret"]));
+        services.AddHttpClient<IKeycloakAdminClient, KeycloakAdminClient>(client =>
+            client.Timeout = TimeSpan.FromSeconds(15))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = false
+            });
         services.AddDataSourceAndRepositories();
         services.RegisterRestApiServices();
         services.AddOpenApiDocument();

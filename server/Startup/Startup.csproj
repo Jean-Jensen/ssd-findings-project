@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure.Keycloak\Infrastructure.Keycloak.csproj" />
     <ProjectReference Include="..\Infrastructure.Postgres\Infrastructure.Postgres.csproj" />
     <ProjectReference Include="..\Api.Rest\Api.Rest.csproj" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
