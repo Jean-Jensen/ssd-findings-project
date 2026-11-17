@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class UsersClient {
+export class TempAuditTestClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -18,71 +18,23 @@ export class UsersClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    listManagedUsers(offset: number | undefined, limit: number | undefined): Promise<ManagedUsersPageDto> {
-        let url_ = this.baseUrl + "/api/users?";
-        if (offset === null)
-            throw new Error("The parameter 'offset' cannot be null.");
-        else if (offset !== undefined)
-            url_ += "offset=" + encodeURIComponent("" + offset) + "&";
-        if (limit === null)
-            throw new Error("The parameter 'limit' cannot be null.");
-        else if (limit !== undefined)
-            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+    run(): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/temp-audit-test";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processListManagedUsers(_response);
-        });
-    }
-
-    protected processListManagedUsers(response: Response): Promise<ManagedUsersPageDto> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ManagedUsersPageDto;
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ManagedUsersPageDto>(null as any);
-    }
-
-    changeUserRole(userId: string, request: ChangeUserRoleDto): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/users/{userId}/role";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(request);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
                 "Accept": "application/octet-stream"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processChangeUserRole(_response);
+            return this.processRun(_response);
         });
     }
 
-    protected processChangeUserRole(response: Response): Promise<FileResponse> {
+    protected processRun(response: Response): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200 || status === 206) {
@@ -344,6 +296,50 @@ export class ControllerForTestingClient {
     }
 }
 
+export class DashboardClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getSummary(): Promise<DashboardSummary> {
+        let url_ = this.baseUrl + "/api/dashboard/Summary";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetSummary(_response);
+        });
+    }
+
+    protected processGetSummary(response: Response): Promise<DashboardSummary> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as DashboardSummary;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardSummary>(null as any);
+    }
+}
+
 export class AuthClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -448,19 +444,15 @@ export class AuthClient {
     }
 }
 
-export interface ManagedUsersPageDto {
-    users?: ManagedUserDto[];
-    hasMore?: boolean;
+export interface DashboardSummary {
+    totalOpen?: number;
+    bySeverity?: DashboardCount[];
+    byStatus?: DashboardCount[];
 }
 
-export interface ManagedUserDto {
-    id?: string;
-    username?: string;
-    roles?: string[];
-}
-
-export interface ChangeUserRoleDto {
-    role?: string;
+export interface DashboardCount {
+    label?: string;
+    count?: number;
 }
 
 export interface UserModel {

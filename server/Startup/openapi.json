@@ -6,81 +6,12 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/users": {
+    "/api/temp-audit-test": {
       "get": {
         "tags": [
-          "Users"
+          "TempAuditTest"
         ],
-        "operationId": "Users_ListManagedUsers",
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0,
-              "maximum": 2147483647.0,
-              "minimum": 0.0
-            },
-            "x-position": 1
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 25,
-              "maximum": 100.0,
-              "minimum": 1.0
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ManagedUsersPageDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/users/{userId}/role": {
-      "put": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "Users_ChangeUserRole",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangeUserRoleDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
+        "operationId": "TempAuditTest_Run",
         "responses": {
           "200": {
             "description": "",
@@ -222,6 +153,26 @@
         }
       }
     },
+    "/api/dashboard/Summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "operationId": "Dashboard_GetSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/Login": {
       "get": {
         "tags": [
@@ -271,45 +222,38 @@
   },
   "components": {
     "schemas": {
-      "ManagedUsersPageDto": {
+      "DashboardSummary": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "users": {
+          "totalOpen": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bySeverity": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ManagedUserDto"
+              "$ref": "#/components/schemas/DashboardCount"
             }
           },
-          "hasMore": {
-            "type": "boolean"
-          }
-        }
-      },
-      "ManagedUserDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "roles": {
+          "byStatus": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/DashboardCount"
             }
           }
         }
       },
-      "ChangeUserRoleDto": {
+      "DashboardCount": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "role": {
+          "label": {
             "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

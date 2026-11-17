@@ -157,6 +157,9 @@ public class Program
             options.AddPolicy(PolicyConstants.CanManageUserRoles, policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireRole(RoleConstants.PM));
+            
         });
+        
+        
     }
 }
