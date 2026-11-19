@@ -45,8 +45,6 @@ public class AuthController : ControllerBase
         {
             Console.WriteLine($"{claim.Type}: {claim.Value}");
         }
-        
-        Console.WriteLine("Correct Role?: " + user.IsInRole(RoleConstants.Auditor));
         // Logs for testing
 
         if (user?.Identity != null && user.Identity.IsAuthenticated)

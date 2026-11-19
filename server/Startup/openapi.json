@@ -6,63 +6,110 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/finding/{id}": {
+    "/api/temp-audit-test": {
       "get": {
         "tags": [
-          "Finding"
+          "TempAuditTest"
         ],
-        "operationId": "Finding_GetFindingWithId",
+        "operationId": "TempAuditTest_Run",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ListManagedUsers",
         "parameters": [
           {
-            "name": "id",
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "maximum": 2147483647.0,
+              "minimum": 0.0
+            },
+            "x-position": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "maximum": 100.0,
+              "minimum": 1.0
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedUsersPageDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{userId}/role": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ChangeUserRole",
+        "parameters": [
+          {
+            "name": "userId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "guid"
+              "type": "string"
             },
             "x-position": 1
           }
         ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Finding"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/finding/add": {
-      "post": {
-        "tags": [
-          "Finding"
-        ],
-        "operationId": "Finding_AddFinding",
         "requestBody": {
-          "x-name": "finding",
+          "x-name": "request",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FindingDto"
+                "$ref": "#/components/schemas/ChangeUserRoleDto"
               }
             }
           },
           "required": true,
-          "x-position": 1
+          "x-position": 2
         },
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/json": {
+              "application/octet-stream": {
                 "schema": {
-                  "type": "boolean"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -70,39 +117,7 @@
         }
       }
     },
-    "/api/finding/update": {
-      "patch": {
-        "tags": [
-          "Finding"
-        ],
-        "operationId": "Finding_UpdateFinding",
-        "requestBody": {
-          "x-name": "finding",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Finding"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/test": {
+    "/api/test/update-findings": {
       "get": {
         "tags": [
           "ControllerForTesting"
@@ -116,6 +131,131 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/view-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_ViewFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/create-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_CreateFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/assign-findings": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_AssignFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/set-sla-targets": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_SetSlaTargets",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/test/manage-user-roles": {
+      "get": {
+        "tags": [
+          "ControllerForTesting"
+        ],
+        "operationId": "ControllerForTesting_ManageUserRoles",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dashboard/Summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "operationId": "Dashboard_GetSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummary"
                 }
               }
             }
@@ -172,64 +312,80 @@
   },
   "components": {
     "schemas": {
-      "Finding": {
+      "ManagedUsersPageDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "findingid": {
-            "type": "string"
-          },
-          "creatorid": {
-            "type": "string",
-            "nullable": true
-          },
-          "details": {
-            "type": "string"
-          },
-          "discoverydate": {
-            "type": "string",
-            "format": "date"
-          },
-          "assigneds": {
+          "users": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Userlink"
+              "$ref": "#/components/schemas/ManagedUserDto"
+            }
+          },
+          "hasMore": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ManagedUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }
       },
-      "Userlink": {
+      "ChangeUserRoleDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "userid": {
+          "role": {
             "type": "string"
+          }
+        }
+      },
+      "DashboardSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalOpen": {
+            "type": "integer",
+            "format": "int32"
           },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "findings": {
+          "bySeverity": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Finding"
+              "$ref": "#/components/schemas/DashboardCount"
+            }
+          },
+          "byStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DashboardCount"
             }
           }
         }
       },
-      "FindingDto": {
+      "DashboardCount": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "findingid": {
+          "label": {
             "type": "string"
           },
-          "creatorid": {
-            "type": "string",
-            "nullable": true
-          },
-          "details": {
-            "type": "string"
+          "count": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

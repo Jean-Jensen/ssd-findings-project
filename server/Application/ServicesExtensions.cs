@@ -14,6 +14,8 @@ public static class ServicesExtensions
 
         services.AddScoped<IFindingService, FindingService>();
         
+        services.AddScoped<IUserRoleService, UserRoleService>();
+
         return services;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Api.Rest;
 using Application;
+using Application.Interfaces;
 using Application.Models.Constants;
+using Infrastructure.Keycloak;
 using Infrastructure.PostGres;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -28,6 +30,18 @@ public class Program
     {
         services.AddAppOptions(configuration);
         services.RegisterApplicationServices();
+        services.AddSingleton(new KeycloakAdminOptions(
+            configuration["OpenIDConnectSettings:Authority"],
+            configuration["OpenIDConnectSettings:ClientId"],
+            configuration["KeycloakAdmin:ClientId"] ?? "auth04-role-manager",
+            configuration["KeycloakAdmin:ClientSecret"]));
+        services.AddHttpClient<IKeycloakAdminClient, KeycloakAdminClient>(client =>
+            client.Timeout = TimeSpan.FromSeconds(15))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = false
+            });
         services.AddDataSourceAndRepositories();
         services.RegisterRestApiServices();
         services.AddOpenApiDocument();
@@ -113,12 +127,39 @@ public class Program
     {
         services.AddAuthorization(options =>
         {
+            options.AddPolicy(PolicyConstants.CanViewFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(
+                        RoleConstants.Analyst,
+                        RoleConstants.Developer,
+                        RoleConstants.PM,
+                        RoleConstants.Auditor));
+
+            options.AddPolicy(PolicyConstants.CanCreateFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.Analyst, RoleConstants.PM));
+
             options.AddPolicy(PolicyConstants.CanUpdateFindings, policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireRole(
                         RoleConstants.Analyst,
                         RoleConstants.Developer,
                         RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanAssignFindings, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.Analyst, RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanSetSlaTargets, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM));
+
+            options.AddPolicy(PolicyConstants.CanManageUserRoles, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM));
+            
         });
+        
+        
     }
 }

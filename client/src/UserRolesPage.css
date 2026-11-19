@@ -1,0 +1,45 @@
+.user-roles-link {
+  display: inline-block;
+  padding: 0.6em 1.2em;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+}
+
+.user-roles-page {
+  max-width: calc(100vw - 4rem);
+  text-align: left;
+}
+
+.user-roles-page h1 {
+  font-size: 2rem;
+}
+
+.user-roles-table {
+  overflow-x: auto;
+}
+
+.user-roles-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-roles-table th,
+.user-roles-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #8885;
+}
+
+.user-roles-table form,
+.user-roles-page nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.user-roles-table select {
+  font: inherit;
+}
+
+.user-roles-page nav {
+  margin-top: 1rem;
+}

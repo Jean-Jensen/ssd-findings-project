@@ -354,6 +354,12 @@
       "core.domain": {
         "type": "Project"
       },
+      "infrastructure.keycloak": {
+        "type": "Project",
+        "dependencies": {
+          "Application": "[1.0.0, )"
+        }
+      },
       "infrastructure.postgres": {
         "type": "Project",
         "dependencies": {

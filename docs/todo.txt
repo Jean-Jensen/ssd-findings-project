@@ -1,0 +1,12 @@
+- about task-AUTH-03:
+    - It's connected with Jean's FIND-02 task. 
+    - But double check when he finishes, it's public accessible and returns acknowledgement.
+    
+
+task-auth-04:
+    - need to create a new client (service-role), policy, permissions, admin permissions, and a new client secret for the new client.
+    - need to run the following command to set up the new client secret:
+dotnet user-secrets set 'KeycloakAdmin:ClientSecret' 'THESECRET' --project server/Startup/Startup.csproj
+
+    - We need to update the user information on our database when it changes role?
+    
