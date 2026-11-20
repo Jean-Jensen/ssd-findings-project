@@ -10,7 +10,7 @@ public class FindingRepository(AppDbContext context) : IFindingRepository
 {
     public async Task<Finding?> GetFindingWithId(Guid id)
     {
-        var finding = await context.Findings.Where(f => f.Findingid == id.ToString()).FirstOrDefaultAsync();
+        var finding = await context.Findings.Where(f => f.FindingId == id).FirstOrDefaultAsync();
         return finding;
     }
 
