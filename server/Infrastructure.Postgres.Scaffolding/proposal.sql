@@ -4,7 +4,7 @@
 
 -- CHANGED: same idea as the old userlink, just snake_case and with name
 CREATE TABLE user_link (
-                           user_id      text PRIMARY KEY,   -- id from keycloak
+                           user_id      uuid PRIMARY KEY,   -- id from keycloak
                            email        text NOT NULL,
                            display_name text
 );
@@ -34,7 +34,7 @@ CREATE TABLE findings (
                           due_date       date,    -- NEW: the SLA deadline (empty until someone sets it). needed for "overdue"
 
     -- who reported it: a logged in user OR an outside person
-                          creator_id     text REFERENCES user_link (user_id),  -- REFERENCES = must exist in user_link (if theres a valuee)
+                          creator_id     uuid REFERENCES user_link (user_id),  -- REFERENCES = must exist in user_link (if theres a valuee)
                           reporter_email text,                                 -- NEW: outside reporter's email (they have no account)
 
                           created_at     timestamptz NOT NULL DEFAULT now(),
@@ -48,7 +48,7 @@ CREATE TABLE findings (
 -- CHANGED: snake_case names, and the primary key starts with finding_id
 CREATE TABLE user_findings (
                                finding_id uuid NOT NULL REFERENCES findings (finding_id),
-                               user_id    text NOT NULL REFERENCES user_link (user_id),
+                               user_id    uuid NOT NULL REFERENCES user_link (user_id),
 
     -- the same person can't be added twice to the same finding
                                PRIMARY KEY (finding_id, user_id)
@@ -62,7 +62,7 @@ CREATE TABLE audit_log (
     -- no cascade delete, history must stay. findings are never hard-deleted anyway
                            finding_id  uuid NOT NULL REFERENCES findings (finding_id),
 
-                           actor_id    text,           -- who did it (keycloak id). empty for outside reporters, they have no account
+                           actor_id    uuid,           -- who did it (keycloak id). empty for outside reporters, they have no account
                            actor_email text NOT NULL,  -- a COPY of their email at that moment, so the log is still right if they change email later
 
 

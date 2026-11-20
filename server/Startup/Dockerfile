@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["Startup/Startup.csproj", "Startup/"]
 COPY ["Application/Application.csproj", "Application/"]
 COPY ["Core.Domain/Core.Domain.csproj", "Core.Domain/"]
+COPY ["Infrastructure.Keycloak/Infrastructure.Keycloak.csproj", "Infrastructure.Keycloak/"]
 COPY ["Infrastructure.Postgres/Infrastructure.Postgres.csproj", "Infrastructure.Postgres/"]
 COPY ["Infrastructure.Postgres.Scaffolding/Infrastructure.Postgres.Scaffolding.csproj", "Infrastructure.Postgres.Scaffolding/"]
 COPY ["Api.Rest/Api.Rest.csproj", "Api.Rest/"]
