@@ -27,6 +27,27 @@
         }
       }
     },
+    "/api/temp-current-user": {
+      "get": {
+        "tags": [
+          "TempCurrentUserTest"
+        ],
+        "operationId": "TempCurrentUserTest_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users": {
       "get": {
         "tags": [
