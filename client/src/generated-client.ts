@@ -590,6 +590,60 @@ export class AuthClient {
     }
 }
 
+export class AuditClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getAuditLog(findingId: string | null | undefined, offset: number | undefined, limit: number | undefined): Promise<AuditLogPageDto> {
+        let url_ = this.baseUrl + "/api/audit?";
+        if (findingId !== undefined && findingId !== null)
+            url_ += "findingId=" + encodeURIComponent("" + findingId) + "&";
+        if (offset === null)
+            throw new Error("The parameter 'offset' cannot be null.");
+        else if (offset !== undefined)
+            url_ += "offset=" + encodeURIComponent("" + offset) + "&";
+        if (limit === null)
+            throw new Error("The parameter 'limit' cannot be null.");
+        else if (limit !== undefined)
+            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAuditLog(_response);
+        });
+    }
+
+    protected processGetAuditLog(response: Response): Promise<AuditLogPageDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuditLogPageDto;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuditLogPageDto>(null as any);
+    }
+}
+
 export interface ManagedUsersPageDto {
     users?: ManagedUserDto[];
     hasMore?: boolean;
@@ -622,6 +676,23 @@ export interface UserModel {
     name?: string | undefined;
     emailAddress?: string | undefined;
     additionalClaims?: { [key: string]: string; };
+}
+
+export interface AuditLogPageDto {
+    items?: AuditLogEntryDto[];
+    total?: number;
+}
+
+export interface AuditLogEntryDto {
+    auditId?: number;
+    occurredAt?: Date;
+    findingId?: string;
+    actorId?: string | undefined;
+    actorEmail?: string;
+    action?: string;
+    fieldName?: string | undefined;
+    oldValue?: string | undefined;
+    newValue?: string | undefined;
 }
 
 export interface FileResponse {

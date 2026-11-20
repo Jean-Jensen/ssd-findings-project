@@ -158,6 +158,10 @@ public class Program
                 policy.RequireAuthenticatedUser()
                     .RequireRole(RoleConstants.PM));
             
+            options.AddPolicy(PolicyConstants.CanViewAuditLog, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM, RoleConstants.Auditor));
+            
         });
         
         
