@@ -558,6 +558,7 @@ export interface ChangeUserRoleDto {
 
 export interface DashboardSummary {
     totalOpen?: number;
+    overdue?: number;
     bySeverity?: DashboardCount[];
     byStatus?: DashboardCount[];
 }

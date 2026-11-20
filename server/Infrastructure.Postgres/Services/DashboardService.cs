@@ -31,9 +31,14 @@ public class DashboardService(AppDbContext db) : IDashboardService
             .Select(g => new { g.Key, Count = g.Count() })
             .ToListAsync();
 
+        // overdue = open AND due date before today. No due date yet = not overdue.
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var overdue = await open.CountAsync(f => f.DueDate < today);
+
         return new DashboardSummary
         {
             TotalOpen = statusCounts.Sum(s => s.Count),
+            Overdue = overdue,
             BySeverity = SeverityOrder.Select(label => new DashboardCount
             {
                 Label = label,

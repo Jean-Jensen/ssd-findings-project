@@ -362,6 +362,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "overdue": {
+            "type": "integer",
+            "format": "int32"
+          },
           "bySeverity": {
             "type": "array",
             "items": {
