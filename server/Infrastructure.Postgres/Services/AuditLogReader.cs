@@ -7,18 +7,30 @@ namespace Infrastructure.PostGres.Services;
 
 public class AuditLogReader(AppDbContext db) : IAuditLogReader
 {
-    public async Task<AuditLogPageDto> GetPageAsync(Guid? findingId, int offset, int limit)
+    public async Task<bool> FindingExistsAsync(Guid findingId)
+    {
+        return await db.Findings
+            .AnyAsync(f => f.FindingId == findingId);
+    }
+
+    public async Task<AuditLogPageDto> GetPageAsync(
+        Guid? findingId,
+        int offset,
+        int limit)
     {
         var query = db.AuditLogs.AsNoTracking();
 
         if (findingId.HasValue)
+        {
             query = query.Where(a => a.FindingId == findingId.Value);
+        }
 
         var total = await query.CountAsync();
-        
+
         var ordered = findingId.HasValue
             ? query.OrderBy(a => a.OccurredAt).ThenBy(a => a.AuditId)
-            : query.OrderByDescending(a => a.OccurredAt).ThenByDescending(a => a.AuditId);
+            : query.OrderByDescending(a => a.OccurredAt)
+                .ThenByDescending(a => a.AuditId);
 
         var items = await ordered
             .Skip(offset)
@@ -37,6 +49,10 @@ public class AuditLogReader(AppDbContext db) : IAuditLogReader
             })
             .ToListAsync();
 
-        return new AuditLogPageDto { Items = items, Total = total };
+        return new AuditLogPageDto
+        {
+            Items = items,
+            Total = total
+        };
     }
 }

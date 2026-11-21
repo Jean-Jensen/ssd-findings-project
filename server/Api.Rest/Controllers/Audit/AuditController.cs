@@ -15,10 +15,45 @@ public class AuditController(IAuditLogReader reader) : ControllerBase
     [HttpGet(ControllerRoute)]
     [Authorize(Policy = PolicyConstants.CanViewAuditLog)]
     public async Task<ActionResult<AuditLogPageDto>> GetAuditLog(
-        Guid? findingId = null,
+        string? findingId = null,
         [Range(0, int.MaxValue)] int offset = 0,
         [Range(1, 100)] int limit = 25)
     {
-        return Ok(await reader.GetPageAsync(findingId, offset, limit));
+        Guid? parsedFindingId = null;
+
+        // Validate the finding ID format.
+        if (!string.IsNullOrWhiteSpace(findingId))
+        {
+            if (!Guid.TryParse(findingId.Trim(), out var parsedId))
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid finding ID",
+                    Detail = "The finding ID must be a valid GUID."
+                });
+            }
+
+            parsedFindingId = parsedId;
+
+            // Check whether the finding exists.
+            var findingExists = await reader.FindingExistsAsync(parsedId);
+
+            if (!findingExists)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Finding not found",
+                    Detail = $"No finding exists with ID '{parsedId}'."
+                });
+            }
+        }
+
+        var result = await reader.GetPageAsync(
+            parsedFindingId,
+            offset,
+            limit
+        );
+
+        return Ok(result);
     }
 }

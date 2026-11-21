@@ -6,48 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/temp-audit-test": {
-      "get": {
-        "tags": [
-          "TempAuditTest"
-        ],
-        "operationId": "TempAuditTest_Run",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/temp-current-user": {
-      "get": {
-        "tags": [
-          "TempCurrentUserTest"
-        ],
-        "operationId": "TempCurrentUserTest_Get",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/users": {
       "get": {
         "tags": [
@@ -342,7 +300,6 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "guid",
               "nullable": true
             },
             "x-position": 1
