@@ -1,4 +1,4 @@
-﻿import {FormEvent, useState} from "react";
+﻿import {useState} from "react";
 import {FindingClient, FindingDto} from "./generated-client.ts";
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
@@ -48,7 +48,7 @@ export default function Findingform(){
             affectedAsset: assetField,
             severity: severityField,
             status: 'New',
-            creatorId: userId,
+            creatorId: userId == "" ? undefined : userId,
             reporterEmail: externalEmail,
         }
         
@@ -78,10 +78,11 @@ export default function Findingform(){
             ) : 
             (
                 <div>
-                    <h3>Title: </h3>
+                    <h3>Email: </h3>
                     <input aria-label={'Email: '} onChange={event => setExternalEmail(event.target.value) }></input>
                 </div>
-            )}
+            )
+        }
         
         <h3>Title: </h3>
         <input aria-label={'Title: '} onChange={event => setTitleField(event.target.value) }></input>
@@ -92,7 +93,7 @@ export default function Findingform(){
         <h3>Severity: </h3>
         <form >
             <select onChange={handleSeverity} id={"severity-select"} name="severity" aria-label={`Severity`} defaultValue="">
-                <option value="" disabled>Select role</option>
+                <option value="" disabled>Select Severity</option>
                 {severityList.map(sev => <option key={sev}>{sev}</option>)}
             </select>
         </form>

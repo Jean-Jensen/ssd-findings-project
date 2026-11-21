@@ -6,6 +6,7 @@ import './App.css'
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
 import Findingform from "./FindingForm.tsx";
+import { useNavigate } from 'react-router-dom';
 
 const userRolesPath = '/user-roles'
 
@@ -13,6 +14,8 @@ function App() {
   const [user, setUser] = useState<UserModel | null>(null)
   const [, setUserA] = useAtom(userAtom)
   const [error, setError] = useState(false)
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     let active = true
@@ -67,9 +70,7 @@ function App() {
             </button>
             <div className={"external-login-div"}>
               <p>not a member of this organization? submit form here</p>
-              <button onClick={() => {
-                window.location.href = window.location.href + `/FindingForm`
-              }}>To external form</button>
+              <button onClick={() => {navigate('/FindingForm')}}>To external form</button>
             </div>
             
           </div>
