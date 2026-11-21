@@ -40,7 +40,8 @@ function App() {
   if (!user) return <p>Checking login…</p>
 
   const canManageRoles = user.isAuthenticated && user.additionalClaims?.app_roles === 'PM'
-
+  //const canCreateFinding = user.isAuthenticated && (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')
+  
   if (window.location.pathname === userRolesPath) {
     return canManageRoles ? <UserRolesPage /> : (
       <main>
@@ -56,8 +57,9 @@ function App() {
         <>
           <h1>Welcome, {user.name || user.emailAddress || 'user'}</h1>
           <p>You are logged in.</p>
+          <p>roles: {user.additionalClaims?.app_roles}</p>
           <Findingform></Findingform>
-          {canManageRoles && <a className="user-roles-link" href={userRolesPath}>Manage user roles</a>}
+          {canManageRoles ? <a className="user-roles-link" href={userRolesPath}>Manage user roles</a> : <></>}
         </>
       ) : (
           <div>
@@ -70,7 +72,7 @@ function App() {
             </button>
             <div className={"external-login-div"}>
               <p>not a member of this organization? submit form here</p>
-              <button onClick={() => {navigate('/FindingForm')}}>To external form</button>
+              <button onClick={() => {navigate('/finding-form')}}>To external form</button>
             </div>
             
           </div>
