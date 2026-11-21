@@ -81,8 +81,7 @@ function App() {
                             Welcome, {user.name || user.emailAddress || 'user'}
                         </h1>
                         <p>
-                            You are logged in. Choose an area below to continue
-                            working with the application.
+                            You are logged in.
                         </p>
                     </header>
 
