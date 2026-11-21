@@ -59,6 +59,29 @@
         }
       }
     },
+    "/api/finding/get-all": {
+      "get": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_GetAllFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Finding"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/finding/add": {
       "post": {
         "tags": [

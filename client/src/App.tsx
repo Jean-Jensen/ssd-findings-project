@@ -7,6 +7,7 @@ import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
 import Findingform from "./FindingForm.tsx";
 import { useNavigate } from 'react-router-dom';
+import FindingTablePage from "./FindingTablePage.tsx";
 
 const userRolesPath = '/user-roles'
 
@@ -40,7 +41,7 @@ function App() {
   if (!user) return <p>Checking login…</p>
 
   const canManageRoles = user.isAuthenticated && user.additionalClaims?.app_roles === 'PM'
-  //const canCreateFinding = user.isAuthenticated && (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')
+  const canCreateFinding = user.isAuthenticated && (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')
   
   if (window.location.pathname === userRolesPath) {
     return canManageRoles ? <UserRolesPage /> : (
@@ -58,7 +59,8 @@ function App() {
           <h1>Welcome, {user.name || user.emailAddress || 'user'}</h1>
           <p>You are logged in.</p>
           <p>roles: {user.additionalClaims?.app_roles}</p>
-          <Findingform></Findingform>
+          <FindingTablePage></FindingTablePage>
+          {canCreateFinding ? <Findingform></Findingform> : <></>}
           {canManageRoles ? <a className="user-roles-link" href={userRolesPath}>Manage user roles</a> : <></>}
         </>
       ) : (

@@ -13,6 +13,12 @@ public class FindingRepository(AppDbContext context) : IFindingRepository
         var finding = await context.Findings.Where(f => f.FindingId == id).FirstOrDefaultAsync();
         return finding;
     }
+    
+    public async Task<List<Finding>> GetAllFindings()
+    {
+        var findings = await context.Findings.ToListAsync();
+        return findings;
+    }
 
     public async Task<bool> AddFinding(Finding finding)
     {

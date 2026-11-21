@@ -10,6 +10,11 @@ public class FindingService(IFindingRepository findRepo) : IFindingService
         return await findRepo.GetFindingWithId(id);
     }
 
+    public async Task<List<Finding>> GetAllFindings()
+    {
+        return await findRepo.GetAllFindings();
+    }
+
     public async Task<bool> AddFinding(Finding finding)
     {
         return await findRepo.AddFinding(finding);
