@@ -42,11 +42,19 @@
 }
 
 .sideways-div{
+  display: flex;
   flex-direction: row;
 }
 
 .external-login-div{
+  display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   
+}
+
+.finding-form-div{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }

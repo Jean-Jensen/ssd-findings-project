@@ -1,7 +1,8 @@
-﻿import {useState} from "react";
+﻿import {FormEvent, useState} from "react";
 import {FindingClient, FindingDto} from "./generated-client.ts";
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
+import './App.css'
 /*import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";*/
 
@@ -21,6 +22,11 @@ const findingClient = new FindingClient(apiUrl, {
 export default function Findingform(){
     
     const [findingDetails, setFindingDetails] = useState("");
+    const [titleField, setTitleField] = useState("");
+    const [assetField, setAssetField] = useState("");
+    const [severityField, setSeverityField] = useState("");
+    const severityList = ['Critical', 'High', 'Medium', 'Low'];
+    const [externalEmail, setExternalEmail] = useState("");
     const [user] = useAtom(userAtom)
     
     function createFindingObject(){
@@ -28,10 +34,18 @@ export default function Findingform(){
         let userId = user!.additionalClaims!["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
         console.log("user ID: " + userId);
         
+        /*if(externalEmail == "" && (user == null || user.isAuthenticated)){
+            
+        }*/
         let finding : FindingDto = {
-            findingid: crypto.randomUUID(),
+            findingId: crypto.randomUUID(),
+            title: titleField,
             details: findingDetails,
-            creatorid: userId
+            affectedAsset: assetField,
+            severity: severityField,
+            status: 'New',
+            //creatorId: string | undefined;
+            reporterEmail: externalEmail,
         }
         
         return finding
@@ -47,9 +61,43 @@ export default function Findingform(){
         
     }
     
-    return <div>
+    function saveSeverity(event: FormEvent<HTMLFormElement>){
+        event.preventDefault();
         
-        <input onChange={event => setFindingDetails(event.target.value) }></input>
+        const form = event.currentTarget
+        const selected = new FormData(form).get("severity");
+        
+        if(typeof(selected) !== "string" || !severityList.includes(selected)) return;
+        
+        setSeverityField(selected)
+    }
+    
+    return <div className={"finding-form-div"}>
+
+        {user != null && user.isAuthenticated ? 
+            (
+                <h1>Report your findings here, {user.name}</h1>
+            ) : 
+            (
+                <div>
+                    <h3>Title: </h3>
+                    <input aria-label={'Email: '} onChange={event => setExternalEmail(event.target.value) }></input>
+                </div>
+            )}
+        
+        <h3>Title: </h3>
+        <input aria-label={'Title: '} onChange={event => setTitleField(event.target.value) }></input>
+        <h3>Details: </h3>
+        <input aria-label={'Details: '} onChange={event => setFindingDetails(event.target.value) }></input>
+        <h3>Affected Asset: </h3>
+        <input aria-label={'Affected Asset: '} onChange={event => setAssetField(event.target.value) }></input>
+        <h3>Severity: </h3>
+        <form onSubmit={event => void saveSeverity(event)}>
+            <select id={"severity-select"} name="severity" aria-label={`Severity`} defaultValue="">
+                <option value="" disabled>Select role</option>
+                {severityList.map(sev => <option key={sev}>{sev}</option>)}
+            </select>
+        </form>
         
         <button onClick={async () => await createFinding()}>Submit</button>
         
