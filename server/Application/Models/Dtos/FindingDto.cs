@@ -32,7 +32,7 @@ public class FindingDto
             ReporterEmail = finding.ReporterEmail != null ? finding.ReporterEmail : null,
             Severity = finding.Severity != null ? finding.Severity : null,
             DiscoveryDate = DateOnly.FromDateTime(DateTime.Today),
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.Now.ToUniversalTime(),
             Title = finding.Title,
             AffectedAsset = finding.AffectedAsset,
             Details = finding.Details,

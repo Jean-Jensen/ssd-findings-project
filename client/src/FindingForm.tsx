@@ -29,14 +29,18 @@ export default function Findingform(){
     const [externalEmail, setExternalEmail] = useState("");
     const [user] = useAtom(userAtom)
     
+    
+    
     function createFindingObject(){
         
-        let userId = user!.additionalClaims!["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-        console.log("user ID: " + userId);
+        let userId = ""
+        if(user != null && user.isAuthenticated){
+            userId = user!.additionalClaims!["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            console.log("user ID: " + userId);
+        }
         
-        /*if(externalEmail == "" && (user == null || user.isAuthenticated)){
-            
-        }*/
+        console.log("Severity: " + severityField);
+        
         let finding : FindingDto = {
             findingId: crypto.randomUUID(),
             title: titleField,
@@ -44,7 +48,7 @@ export default function Findingform(){
             affectedAsset: assetField,
             severity: severityField,
             status: 'New',
-            //creatorId: string | undefined;
+            creatorId: userId,
             reporterEmail: externalEmail,
         }
         
@@ -61,16 +65,10 @@ export default function Findingform(){
         
     }
     
-    function saveSeverity(event: FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        
-        const form = event.currentTarget
-        const selected = new FormData(form).get("severity");
-        
-        if(typeof(selected) !== "string" || !severityList.includes(selected)) return;
-        
-        setSeverityField(selected)
-    }
+    
+    
+    const handleSeverity = (selectedVal: { target: { value: any; }; } ) => setSeverityField(selectedVal.target.value)
+    
     
     return <div className={"finding-form-div"}>
 
@@ -92,8 +90,8 @@ export default function Findingform(){
         <h3>Affected Asset: </h3>
         <input aria-label={'Affected Asset: '} onChange={event => setAssetField(event.target.value) }></input>
         <h3>Severity: </h3>
-        <form onSubmit={event => void saveSeverity(event)}>
-            <select id={"severity-select"} name="severity" aria-label={`Severity`} defaultValue="">
+        <form >
+            <select onChange={handleSeverity} id={"severity-select"} name="severity" aria-label={`Severity`} defaultValue="">
                 <option value="" disabled>Select role</option>
                 {severityList.map(sev => <option key={sev}>{sev}</option>)}
             </select>
