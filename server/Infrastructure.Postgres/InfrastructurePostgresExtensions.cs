@@ -1,5 +1,6 @@
 using Application;
 using Application.Interfaces;
+using Infrastructure.Postgres.Repositories;
 using Infrastructure.Postgres.Scaffolding;
 using Infrastructure.PostGres.Services;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ public static class InfrastructurePostgresExtensions
         services.AddScoped<IAuditLogReader, AuditLogReader>();
         
         services.AddScoped<Seeder>();
+        services.AddScoped<IFindingRepository, FindingRepository>();
 
         return services;
     }

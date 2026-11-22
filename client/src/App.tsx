@@ -5,30 +5,38 @@ import type { UserModel } from './generated-client'
 import UserRolesPage from './UserRolesPage'
 import AuditLogPage from './AuditLogPage'
 import './App.css'
+import {useAtom} from "jotai";
+import {userAtom} from "./atoms.ts";
+import Findingform from "./FindingForm.tsx";
+import { useNavigate } from 'react-router-dom';
+import FindingTablePage from "./FindingTablePage.tsx";
 import DashboardPage from './DashboardPage'
 
 const userRolesPath = '/user-roles'
 const auditLogPath = '/audit-log'
 const dashboardPath = '/dashboard'
+const findingAddPath = '/finding-form'
 
 function App() {
-    const [user, setUser] = useState<UserModel | null>(null)
-    const [error, setError] = useState(false)
+  const [user, setUser] = useState<UserModel | null>(null)
+  const [, setUserA] = useAtom(userAtom)
+  const [error, setError] = useState(false)
+  const navigate = useNavigate();
+  
 
     useEffect(() => {
         let active = true
 
-        authClient.getUserInfo()
-            .then(result => {
-                if (active) {
-                    setUser(result)
-                }
-            })
-            .catch(() => {
-                if (active) {
-                    setError(true)
-                }
-            })
+    authClient.getUserInfo()
+      .then(result => {
+        if (active) {
+          setUser(result);
+          setUserA(result);
+          }
+      })
+      .catch(() => {
+        if (active) setError(true)
+      })
 
         return () => {
             active = false
@@ -58,6 +66,11 @@ function App() {
             user.additionalClaims?.app_roles ?? ''
         )
 
+    const canCreateFinding =
+        (user.isAuthenticated && 
+        (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')) 
+        || !user.isAuthenticated //to allow exteral users
+
     if (window.location.pathname === userRolesPath) {
         return canManageRoles
             ? <UserRolesPage />
@@ -85,6 +98,16 @@ function App() {
             : (
                 <main>
                     <p>You do not have permission to view the dashboard.</p>
+                    <a href="/">Back to home</a>
+                </main>
+            )
+    }
+    if (window.location.pathname === findingAddPath) {
+        return canCreateFinding
+            ? <Findingform />
+            : (
+                <main>
+                    <p>You do not have permission to view the finding form.</p>
                     <a href="/">Back to home</a>
                 </main>
             )
@@ -167,6 +190,8 @@ function App() {
                         </nav>
                     </section>
 
+                    <FindingTablePage></FindingTablePage>
+
 
                     <footer className="app-home-footer">
                         Application dashboard
@@ -183,6 +208,11 @@ function App() {
                     >
                         Login
                     </button>
+                    <div className={"external-login-div"}>
+                        <p>not a member of this organization? submit form here</p>
+                        <button onClick={() => {navigate('/finding-form')}}>To external form</button>
+                    </div>
+
                 </div>
             )}
         </main>

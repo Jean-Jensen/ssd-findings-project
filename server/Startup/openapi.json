@@ -6,6 +6,125 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/finding/{id}": {
+      "get": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_GetFindingWithId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Finding"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finding/get-all": {
+      "get": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_GetAllFindings",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Finding"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finding/add": {
+      "post": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_AddFinding",
+        "requestBody": {
+          "x-name": "finding",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindingDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finding/update": {
+      "patch": {
+        "tags": [
+          "Finding"
+        ],
+        "operationId": "Finding_UpdateFinding",
+        "requestBody": {
+          "x-name": "finding",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Finding"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users": {
       "get": {
         "tags": [
@@ -346,6 +465,187 @@
   },
   "components": {
     "schemas": {
+      "Finding": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "findingId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "details": {
+            "type": "string"
+          },
+          "affectedAsset": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "discoveryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "creatorId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "reporterEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "auditLogs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditLog"
+            }
+          },
+          "creator": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserLink"
+              }
+            ]
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserLink"
+            }
+          }
+        }
+      },
+      "AuditLog": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "auditId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "findingId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "actorEmail": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "fieldName": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "newValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "finding": {
+            "$ref": "#/components/schemas/Finding"
+          }
+        }
+      },
+      "UserLink": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          },
+          "findingsNavigation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          }
+        }
+      },
+      "FindingDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "findingId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "details": {
+            "type": "string"
+          },
+          "affectedAsset": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "creatorId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "reporterEmail": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "ManagedUsersPageDto": {
         "type": "object",
         "additionalProperties": false,
