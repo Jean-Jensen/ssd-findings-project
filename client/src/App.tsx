@@ -15,6 +15,7 @@ import DashboardPage from './DashboardPage'
 const userRolesPath = '/user-roles'
 const auditLogPath = '/audit-log'
 const dashboardPath = '/dashboard'
+const findingAddPath = '/finding-form'
 
 function App() {
   const [user, setUser] = useState<UserModel | null>(null)
@@ -65,6 +66,11 @@ function App() {
             user.additionalClaims?.app_roles ?? ''
         )
 
+    const canCreateFinding =
+        (user.isAuthenticated && 
+        (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')) 
+        || !user.isAuthenticated //to allow exteral users
+
     if (window.location.pathname === userRolesPath) {
         return canManageRoles
             ? <UserRolesPage />
@@ -92,6 +98,16 @@ function App() {
             : (
                 <main>
                     <p>You do not have permission to view the dashboard.</p>
+                    <a href="/">Back to home</a>
+                </main>
+            )
+    }
+    if (window.location.pathname === findingAddPath) {
+        return canCreateFinding
+            ? <Findingform />
+            : (
+                <main>
+                    <p>You do not have permission to view the finding form.</p>
                     <a href="/">Back to home</a>
                 </main>
             )
@@ -174,6 +190,8 @@ function App() {
                         </nav>
                     </section>
 
+                    <FindingTablePage></FindingTablePage>
+
 
                     <footer className="app-home-footer">
                         Application dashboard
@@ -190,6 +208,11 @@ function App() {
                     >
                         Login
                     </button>
+                    <div className={"external-login-div"}>
+                        <p>not a member of this organization? submit form here</p>
+                        <button onClick={() => {navigate('/finding-form')}}>To external form</button>
+                    </div>
+
                 </div>
             )}
         </main>

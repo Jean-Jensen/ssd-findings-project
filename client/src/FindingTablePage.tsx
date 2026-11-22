@@ -69,7 +69,6 @@ export default function FindingTablePage(){
     ];*/
     
     return <>
-        <p> test </p>
         {allFindings?.length > 0 && (
             <div className="user-roles-table">
             <table>
