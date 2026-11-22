@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\Infrastructure.Postgres\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <PropertyGroup>

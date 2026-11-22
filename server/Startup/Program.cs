@@ -17,6 +17,9 @@ public class Program
 {
     public static async Task Main()
     {
+
+        DotNetEnv.Env.Load();
+
         var builder = WebApplication.CreateBuilder();
         ConfigureServices(builder.Services, builder.Configuration);
         ConfigureOIDCServices(builder.Services, builder.Configuration);
@@ -157,6 +160,10 @@ public class Program
             options.AddPolicy(PolicyConstants.CanManageUserRoles, policy =>
                 policy.RequireAuthenticatedUser()
                     .RequireRole(RoleConstants.PM));
+            
+            options.AddPolicy(PolicyConstants.CanViewAuditLog, policy =>
+                policy.RequireAuthenticatedUser()
+                    .RequireRole(RoleConstants.PM, RoleConstants.Auditor));
             
         });
         

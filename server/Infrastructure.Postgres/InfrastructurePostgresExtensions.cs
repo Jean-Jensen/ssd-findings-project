@@ -27,6 +27,7 @@ public static class InfrastructurePostgresExtensions
         
         services.AddScoped<IAuditLogService, AuditLogService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IAuditLogReader, AuditLogReader>();
         
         services.AddScoped<Seeder>();
         services.AddScoped<IFindingRepository, FindingRepository>();

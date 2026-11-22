@@ -2,6 +2,15 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
+      "DotNetEnv": {
+        "type": "Direct",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "2q+PD+aJcRW9QuRcIv4F8WbvEDxI6cwxzZJec2i45cBY4cAKCAoW4ZPkApJ7H82wr6Yfmxx/0kb1nLnRmZrGZA==",
+        "dependencies": {
+          "Superpower": "3.0.0"
+        }
+      },
       "NSwag.AspNetCore": {
         "type": "Direct",
         "requested": "[14.2.0, )",
@@ -281,6 +290,11 @@
         "type": "Transitive",
         "resolved": "1.0.2",
         "contentHash": "MVF15eZfdTxA0yH43E4xDgByRPlyrLkXKq5/0FtQQvNwOJIljz2p4/phEdLnjWhhftu9isae1EGVydnY333AFw=="
+      },
+      "Superpower": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "bjKbAYWePooCAvPxQq+3KnmcLfRggMyRoXmtBMlmCG71bdwBHrO6rmRJ2DRIodg5aztNcxeZXBUVWT+H+MZUhw=="
       },
       "Swashbuckle.AspNetCore": {
         "type": "Transitive",
