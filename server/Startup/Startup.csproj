@@ -10,6 +10,7 @@
     <UserSecretsId>98dcd66c-fdcc-4fb2-a168-2f704f8fcb96</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Keycloak\Infrastructure.Keycloak.csproj" />
     <ProjectReference Include="..\Infrastructure.Postgres\Infrastructure.Postgres.csproj" />

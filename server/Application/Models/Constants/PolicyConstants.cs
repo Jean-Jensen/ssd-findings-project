@@ -8,4 +8,5 @@ public static class PolicyConstants
     public const string CanAssignFindings = "CanAssignFindings";
     public const string CanSetSlaTargets = "CanSetSlaTargets";
     public const string CanManageUserRoles = "CanManageUserRoles";
+    public const string CanViewAuditLog = "CanViewAuditLog";
 }

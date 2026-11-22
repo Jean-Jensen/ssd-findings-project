@@ -1,4 +1,6 @@
 using Api.Rest.Middleware;
+using Api.Rest.Services;
+using Application.Interfaces;
 
 namespace Api.Rest;
 
@@ -11,6 +13,9 @@ public static class RestStartupExtensions
         services.AddProblemDetails();
 
         services.AddCors();
+        
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUser, CurrentUser>();
 
         var controllersAssembly = typeof(RestStartupExtensions).Assembly;
 

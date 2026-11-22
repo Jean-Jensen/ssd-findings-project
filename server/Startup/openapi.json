@@ -6,27 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/temp-audit-test": {
-      "get": {
-        "tags": [
-          "TempAuditTest"
-        ],
-        "operationId": "TempAuditTest_Run",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/users": {
       "get": {
         "tags": [
@@ -308,6 +287,61 @@
           }
         }
       }
+    },
+    "/api/audit": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "operationId": "Audit_GetAuditLog",
+        "parameters": [
+          {
+            "name": "findingId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "maximum": 2147483647.0,
+              "minimum": 0.0
+            },
+            "x-position": 2
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "maximum": 100.0,
+              "minimum": 1.0
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditLogPageDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -362,6 +396,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "overdue": {
+            "type": "integer",
+            "format": "int32"
+          },
           "bySeverity": {
             "type": "array",
             "items": {
@@ -409,6 +447,63 @@
             "additionalProperties": {
               "type": "string"
             }
+          }
+        }
+      },
+      "AuditLogPageDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditLogEntryDto"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AuditLogEntryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "auditId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "findingId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "actorEmail": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "fieldName": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "newValue": {
+            "type": "string",
+            "nullable": true
           }
         }
       }
