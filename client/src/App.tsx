@@ -5,9 +5,11 @@ import type { UserModel } from './generated-client'
 import UserRolesPage from './UserRolesPage'
 import AuditLogPage from './AuditLogPage'
 import './App.css'
+import DashboardPage from './DashboardPage'
 
 const userRolesPath = '/user-roles'
 const auditLogPath = '/audit-log'
+const dashboardPath = '/dashboard'
 
 function App() {
     const [user, setUser] = useState<UserModel | null>(null)
@@ -50,6 +52,12 @@ function App() {
         (user.additionalClaims?.app_roles === 'PM' ||
             user.additionalClaims?.app_roles === 'Auditor')
 
+    const canViewDashboard =
+        user.isAuthenticated &&
+        ['Analyst', 'Developer', 'PM', 'Auditor'].includes(
+            user.additionalClaims?.app_roles ?? ''
+        )
+
     if (window.location.pathname === userRolesPath) {
         return canManageRoles
             ? <UserRolesPage />
@@ -67,6 +75,16 @@ function App() {
             : (
                 <main>
                     <p>You do not have permission to view the audit log.</p>
+                    <a href="/">Back to home</a>
+                </main>
+            )
+    }
+    if (window.location.pathname === dashboardPath) {
+        return canViewDashboard
+            ? <DashboardPage />
+            : (
+                <main>
+                    <p>You do not have permission to view the dashboard.</p>
                     <a href="/">Back to home</a>
                 </main>
             )
@@ -89,6 +107,25 @@ function App() {
                         <h2>Application</h2>
 
                         <nav className="app-navigation">
+
+                            {canViewDashboard && (
+                                <a
+                                    href={dashboardPath}
+                                    className="app-navigation-card"
+                                >
+                                    <div>
+                                        <h3>Dashboard</h3>
+                                        <p>
+                                            View finding statistics, severity distribution
+                                            and current status.
+                                        </p>
+                                    </div>
+
+                                    <span className="app-card-link">
+            View dashboard →
+        </span>
+                                </a>
+                            )}
                             {canViewAuditLog && (
                                 <a
                                     href={auditLogPath}
@@ -126,8 +163,10 @@ function App() {
                                     </span>
                                 </a>
                             )}
+
                         </nav>
                     </section>
+
 
                     <footer className="app-home-footer">
                         Application dashboard

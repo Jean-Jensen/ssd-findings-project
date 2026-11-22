@@ -17,6 +17,9 @@ public class Program
 {
     public static async Task Main()
     {
+
+        DotNetEnv.Env.Load();
+
         var builder = WebApplication.CreateBuilder();
         ConfigureServices(builder.Services, builder.Configuration);
         ConfigureOIDCServices(builder.Services, builder.Configuration);
