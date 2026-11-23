@@ -6,10 +6,31 @@ services:
       - POSTGRES_PASSWORD=testpass
       - POSTGRES_DB=testdb
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./server/Infrastructure.Postgres.Scaffolding/proposal.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "testuser", "-d", "testdb"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.6
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: lab-admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${LAB_KEYCLOAK_ADMIN_PASSWORD:?Set LAB_KEYCLOAK_ADMIN_PASSWORD in .env}
+      LAB_OIDC_SECRET: ${LAB_OIDC_SECRET:?Set LAB_OIDC_SECRET in .env}
+      LAB_ROLE_MANAGER_SECRET: ${LAB_ROLE_MANAGER_SECRET:?Set LAB_ROLE_MANAGER_SECRET in .env}
+      LAB_TEST_USER_PASSWORD: ${LAB_TEST_USER_PASSWORD:?Set LAB_TEST_USER_PASSWORD in .env}
+    ports:
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./keycloak/findings-lab-realm.json:/opt/keycloak/data/import/findings-lab-realm.json:ro
 
 volumes:
   postgres_data:
+  keycloak_data:

@@ -1,0 +1,751 @@
+{
+  "realm": "findings-lab",
+  "enabled": true,
+  "sslRequired": "external",
+  "loginWithEmailAllowed": true,
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "adminPermissionsEnabled": true,
+  "adminPermissionsClient": {
+    "id": "76a75aa4-a4d5-5a25-bdf8-75a4e297521b",
+    "clientId": "admin-permissions"
+  },
+  "roles": {
+    "realm": [
+      {
+        "id": "d1a84a68-bd79-55f4-bc3d-46a25f56a65d",
+        "name": "auth04-role-manager-access"
+      }
+    ],
+    "client": {
+      "vuln-app": [
+        {
+          "id": "de044d6c-2de8-5e94-9663-de329bbaf4d8",
+          "name": "Developer",
+          "description": ""
+        },
+        {
+          "id": "34d1ff09-4291-59de-ac43-6d37a63ce01a",
+          "name": "PM",
+          "description": ""
+        },
+        {
+          "id": "38843b41-47f3-5968-8f0c-619a9c2b3cb6",
+          "name": "Analyst",
+          "description": ""
+        },
+        {
+          "id": "344e65ed-8275-511f-9497-4b9774cd268f",
+          "name": "Auditor",
+          "description": ""
+        }
+      ]
+    }
+  },
+  "clients": [
+    {
+      "id": "f40218c3-892f-55e0-a3d8-5242d1133e1b",
+      "clientId": "vuln-app",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "frontchannelLogout": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "organization",
+        "microprofile-jwt"
+      ],
+      "secret": "${LAB_OIDC_SECRET}",
+      "attributes": {
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "backchannel.logout.session.required": "true",
+        "dpop.bound.access.tokens": "false",
+        "frontchannel.logout.session.required": "true",
+        "logout.confirmation.enabled": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "pkce.code.challenge.method": "S256",
+        "standard.token.exchange.enabled": "false"
+      },
+      "redirectUris": [
+        "http://localhost:5001/api/auth/Callback"
+      ],
+      "protocolMappers": [
+        {
+          "name": "application-roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "false",
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "true",
+            "lightweight.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "app_roles",
+            "jsonType.label": "String",
+            "usermodel.clientRoleMapping.clientId": "vuln-app"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6eda8fcd-afb6-5018-8943-a504fd3dcae5",
+      "clientId": "auth04-role-manager",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "frontchannelLogout": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "service_account",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "organization",
+        "microprofile-jwt"
+      ],
+      "secret": "${LAB_ROLE_MANAGER_SECRET}",
+      "attributes": {
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "backchannel.logout.session.required": "true",
+        "dpop.bound.access.tokens": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "standard.token.exchange.enabled": "false"
+      },
+      "redirectUris": []
+    },
+    {
+      "id": "76a75aa4-a4d5-5a25-bdf8-75a4e297521b",
+      "clientId": "admin-permissions",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": false,
+      "frontchannelLogout": false,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "organization",
+        "microprofile-jwt"
+      ],
+      "attributes": {
+        "realm_client": "true"
+      },
+      "authorizationServicesEnabled": true,
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "ENFORCING",
+        "decisionStrategy": "UNANIMOUS",
+        "authorizationSchema": {
+          "resourceTypes": {
+            "Clients": {
+              "type": "Clients",
+              "scopes": [
+                "map-roles-composite",
+                "manage",
+                "map-roles",
+                "map-roles-client-scope",
+                "view"
+              ],
+              "scopeAliases": {}
+            },
+            "Users": {
+              "type": "Users",
+              "scopes": [
+                "map-roles",
+                "manage",
+                "manage-group-membership",
+                "reset-password",
+                "view",
+                "impersonate"
+              ],
+              "scopeAliases": {
+                "view": [
+                  "view-members"
+                ],
+                "manage": [
+                  "manage-members"
+                ],
+                "impersonate": [
+                  "impersonate-members"
+                ]
+              },
+              "groupType": "Groups"
+            },
+            "Groups": {
+              "type": "Groups",
+              "scopes": [
+                "manage",
+                "view",
+                "manage-membership",
+                "manage-members",
+                "view-members",
+                "impersonate-members"
+              ],
+              "scopeAliases": {}
+            },
+            "Roles": {
+              "type": "Roles",
+              "scopes": [
+                "map-role-client-scope",
+                "map-role-composite",
+                "map-role"
+              ],
+              "scopeAliases": {}
+            }
+          }
+        },
+        "scopes": [
+          {
+            "name": "manage-group-membership"
+          },
+          {
+            "name": "map-roles-client-scope"
+          },
+          {
+            "name": "view-members"
+          },
+          {
+            "name": "map-role"
+          },
+          {
+            "name": "reset-password"
+          },
+          {
+            "name": "manage"
+          },
+          {
+            "name": "impersonate-members"
+          },
+          {
+            "name": "manage-members"
+          },
+          {
+            "name": "view"
+          },
+          {
+            "name": "impersonate"
+          },
+          {
+            "name": "manage-membership"
+          },
+          {
+            "name": "map-role-composite"
+          },
+          {
+            "name": "map-roles"
+          },
+          {
+            "name": "map-role-client-scope"
+          },
+          {
+            "name": "map-roles-composite"
+          }
+        ],
+        "resources": [
+          {
+            "type": "Clients",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "map-roles-client-scope"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "manage"
+              },
+              {
+                "name": "map-roles-composite"
+              }
+            ],
+            "name": "Clients"
+          },
+          {
+            "type": "Users",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "reset-password"
+              },
+              {
+                "name": "manage"
+              }
+            ],
+            "name": "Users"
+          },
+          {
+            "type": "Groups",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "manage-members"
+              },
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-membership"
+              },
+              {
+                "name": "view-members"
+              },
+              {
+                "name": "manage"
+              },
+              {
+                "name": "impersonate-members"
+              }
+            ],
+            "name": "Groups"
+          },
+          {
+            "type": "Roles",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "map-role-composite"
+              },
+              {
+                "name": "map-role-client-scope"
+              },
+              {
+                "name": "map-role"
+              }
+            ],
+            "name": "Roles"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "reset-password"
+              },
+              {
+                "name": "manage"
+              }
+            ],
+            "name": "f1400ed8-86a3-5e57-b05c-bbb507a67ee1"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "reset-password"
+              },
+              {
+                "name": "manage"
+              }
+            ],
+            "name": "479c556b-cecd-59a5-8b3f-bef70ae45cb7"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "reset-password"
+              },
+              {
+                "name": "manage"
+              }
+            ],
+            "name": "f24af656-68f3-5d60-899e-c1cc36757d3d"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "reset-password"
+              },
+              {
+                "name": "manage"
+              }
+            ],
+            "name": "12bbad92-c9bf-5efc-90ec-f113f3b5fcb6"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "map-role-composite"
+              },
+              {
+                "name": "map-role-client-scope"
+              },
+              {
+                "name": "map-role"
+              }
+            ],
+            "name": "de044d6c-2de8-5e94-9663-de329bbaf4d8"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "map-role-composite"
+              },
+              {
+                "name": "map-role-client-scope"
+              },
+              {
+                "name": "map-role"
+              }
+            ],
+            "name": "34d1ff09-4291-59de-ac43-6d37a63ce01a"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "map-role-composite"
+              },
+              {
+                "name": "map-role-client-scope"
+              },
+              {
+                "name": "map-role"
+              }
+            ],
+            "name": "38843b41-47f3-5968-8f0c-619a9c2b3cb6"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "map-role-composite"
+              },
+              {
+                "name": "map-role-client-scope"
+              },
+              {
+                "name": "map-role"
+              }
+            ],
+            "name": "344e65ed-8275-511f-9497-4b9774cd268f"
+          },
+          {
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "map-roles-client-scope"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "manage"
+              },
+              {
+                "name": "map-roles-composite"
+              }
+            ],
+            "name": "f40218c3-892f-55e0-a3d8-5242d1133e1b"
+          }
+        ],
+        "policies": [
+          {
+            "name": "AUTH-04-service-account-other-v2",
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "fetchRoles": "false",
+              "roles": "[{\"id\":\"auth04-role-manager-access\",\"required\":false}]"
+            }
+          },
+          {
+            "name": "users-pm-can-manage",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "Users",
+              "resources": "[\"f1400ed8-86a3-5e57-b05c-bbb507a67ee1\", \"f24af656-68f3-5d60-899e-c1cc36757d3d\", \"12bbad92-c9bf-5efc-90ec-f113f3b5fcb6\", \"479c556b-cecd-59a5-8b3f-bef70ae45cb7\"]",
+              "scopes": "[\"view\",\"map-roles\"]",
+              "applyPolicies": "[\"AUTH-04-service-account-other-v2\"]"
+            }
+          },
+          {
+            "name": "roles-pm-can-manage",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "Roles",
+              "resources": "[\"de044d6c-2de8-5e94-9663-de329bbaf4d8\", \"34d1ff09-4291-59de-ac43-6d37a63ce01a\", \"344e65ed-8275-511f-9497-4b9774cd268f\", \"38843b41-47f3-5968-8f0c-619a9c2b3cb6\"]",
+              "scopes": "[\"map-role\"]",
+              "applyPolicies": "[\"AUTH-04-service-account-other-v2\"]"
+            }
+          },
+          {
+            "name": "client-that-own-the-roles",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "Clients",
+              "resources": "[\"f40218c3-892f-55e0-a3d8-5242d1133e1b\"]",
+              "scopes": "[\"view\"]",
+              "applyPolicies": "[\"AUTH-04-service-account-other-v2\"]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "12bbad92-c9bf-5efc-90ec-f113f3b5fcb6",
+      "username": "analyst",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Analyst",
+      "lastName": "Lab",
+      "email": "analyst@findings-lab.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LAB_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "clientRoles": {
+        "vuln-app": [
+          "Analyst"
+        ]
+      }
+    },
+    {
+      "id": "479c556b-cecd-59a5-8b3f-bef70ae45cb7",
+      "username": "developer",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Developer",
+      "lastName": "Lab",
+      "email": "developer@findings-lab.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LAB_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "clientRoles": {
+        "vuln-app": [
+          "Developer"
+        ]
+      }
+    },
+    {
+      "id": "f24af656-68f3-5d60-899e-c1cc36757d3d",
+      "username": "project_manager",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Project Manager",
+      "lastName": "Lab",
+      "email": "project_manager@findings-lab.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LAB_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "clientRoles": {
+        "vuln-app": [
+          "PM"
+        ]
+      }
+    },
+    {
+      "id": "f1400ed8-86a3-5e57-b05c-bbb507a67ee1",
+      "username": "auditor",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Auditor",
+      "lastName": "Lab",
+      "email": "auditor@findings-lab.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LAB_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ],
+      "clientRoles": {
+        "vuln-app": [
+          "Auditor"
+        ]
+      }
+    },
+    {
+      "id": "310934e3-8d1b-51da-b4d9-99695de49711",
+      "username": "roleless",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Roleless",
+      "lastName": "Lab",
+      "email": "roleless@findings-lab.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${LAB_TEST_USER_PASSWORD}",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "2ee5982d-7e68-56a2-9d8d-3ae05e4f7830",
+      "username": "service-account-auth04-role-manager",
+      "enabled": true,
+      "serviceAccountClientId": "auth04-role-manager",
+      "realmRoles": [
+        "auth04-role-manager-access"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "query-clients",
+          "query-users"
+        ]
+      }
+    }
+  ]
+}
