@@ -19,7 +19,7 @@ const findingAddPath = '/finding-form'
 
 function App() {
   const [user, setUser] = useState<UserModel | null>(null)
-  const [userA, setUserA] = useAtom(userAtom)
+  const [, setUserA] = useAtom(userAtom)
   const [error, setError] = useState(false)
   const navigate = useNavigate();
 
@@ -30,7 +30,6 @@ function App() {
         authClient.getUserInfo()
             .then(result => {
                 if (active) {
-                    
                     setUser(result);
                     setUserA(result);
                 }
@@ -44,9 +43,6 @@ function App() {
         }
     }, [])
     
-    useEffect(() => {
-        console.log("atom has been set " + user);
-    }, [userA])
 
 
 

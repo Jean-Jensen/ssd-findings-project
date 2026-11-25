@@ -31,17 +31,12 @@ export default function Findingform(){
     
     useEffect(() => {
         if(user != null ){
-            console.log(user)
+            console.log("Found user!")
         } else {
             console.log("couldnt find user, assuming this is external reporter")
         }
         
     },[])
-
-    useEffect(() => {
-        console.log("atoms been set " + user);
-
-    },[user])
     
     function createFindingObject(){
         
