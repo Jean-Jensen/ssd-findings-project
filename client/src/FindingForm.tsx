@@ -1,4 +1,4 @@
-﻿import {useState} from "react";
+﻿import {useEffect, useState} from "react";
 import {FindingClient, FindingDto} from "./generated-client.ts";
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
@@ -29,7 +29,19 @@ export default function Findingform(){
     const [externalEmail, setExternalEmail] = useState("");
     const [user] = useAtom(userAtom)
     
-    
+    useEffect(() => {
+        if(user != null ){
+            console.log(user)
+        } else {
+            console.log("couldnt find user, assuming this is external reporter")
+        }
+        
+    },[])
+
+    useEffect(() => {
+        console.log("atoms been set " + user);
+
+    },[user])
     
     function createFindingObject(){
         
