@@ -51,6 +51,7 @@ public class AuthController : ControllerBase
 
         if (user?.Identity != null && user.Identity.IsAuthenticated)
         {
+            Console.WriteLine("RETURNING USER !!!!!!!!!!!");
             return Ok(new UserModel
             {
                 IsAuthenticated = true,

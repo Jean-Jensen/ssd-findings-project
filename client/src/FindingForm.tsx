@@ -1,4 +1,4 @@
-﻿import {useState} from "react";
+﻿import {useEffect, useState} from "react";
 import {FindingClient, FindingDto} from "./generated-client.ts";
 import {useAtom} from "jotai";
 import {userAtom} from "./atoms.ts";
@@ -29,7 +29,14 @@ export default function Findingform(){
     const [externalEmail, setExternalEmail] = useState("");
     const [user] = useAtom(userAtom)
     
-    
+    useEffect(() => {
+        if(user != null ){
+            console.log("Found user!")
+        } else {
+            console.log("couldnt find user, assuming this is external reporter")
+        }
+        
+    },[])
     
     function createFindingObject(){
         
@@ -57,11 +64,19 @@ export default function Findingform(){
     }
     
     async function createFinding(){
-        let finding: FindingDto = createFindingObject();
+        if(severityField != "" && severityField != "Select Severity" 
+            && titleField != "" && assetField != ""
+            && findingDetails != ""){
+            let finding: FindingDto = createFindingObject();
+
+            console.log(finding);
+
+            await findingClient.addFinding(finding);
+        } else {
+            console.log("dont leave any field blank")
+        }
         
-        console.log(finding);
         
-        await findingClient.addFinding(finding);
         
     }
     

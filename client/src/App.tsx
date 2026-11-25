@@ -22,26 +22,29 @@ function App() {
   const [, setUserA] = useAtom(userAtom)
   const [error, setError] = useState(false)
   const navigate = useNavigate();
-  
+
 
     useEffect(() => {
         let active = true
 
-    authClient.getUserInfo()
-      .then(result => {
-        if (active) {
-          setUser(result);
-          setUserA(result);
-          }
-      })
-      .catch(() => {
-        if (active) setError(true)
-      })
+        authClient.getUserInfo()
+            .then(result => {
+                if (active) {
+                    setUser(result);
+                    setUserA(result);
+                }
+            })
+            .catch(() => {
+                if (active) setError(true)
+            })
 
         return () => {
             active = false
         }
     }, [])
+    
+
+
 
     if (error) {
         return <p>Could not check login status.</p>
@@ -68,7 +71,9 @@ function App() {
 
     const canCreateFinding =
         (user.isAuthenticated && 
-        (user.additionalClaims?.app_roles === 'PM' || user.additionalClaims?.app_roles === 'Analyst')) 
+        (['Analyst', 'PM'].includes(
+            user.additionalClaims?.app_roles ?? ''
+        ))) 
         || !user.isAuthenticated //to allow exteral users
 
     if (window.location.pathname === userRolesPath) {
@@ -153,8 +158,8 @@ function App() {
                                     </div>
 
                                     <span className="app-card-link">
-            View dashboard →
-        </span>
+                                        View dashboard →
+                                    </span>
                                 </a>
                             )}
                             {canViewAuditLog && (
@@ -191,6 +196,25 @@ function App() {
 
                                     <span className="app-card-link">
                                         Manage users →
+                                    </span>
+                                </a>
+                            )}
+
+                            {canCreateFinding && (
+                                <a
+                                    href={findingAddPath}
+                                    className="app-navigation-card"
+                                >
+                                    <div>
+                                        <h3>Submit A Finding</h3>
+                                        <p>
+                                            Send a finding to us so we 
+                                            can fix it as soon as possible. 
+                                        </p>
+                                    </div>
+
+                                    <span className="app-card-link">
+                                        Submit finding →
                                     </span>
                                 </a>
                             )}
