@@ -407,6 +407,19 @@
         }
       }
     },
+    "/api/auth/Logout": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_Logout",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/audit": {
       "get": {
         "tags": [
