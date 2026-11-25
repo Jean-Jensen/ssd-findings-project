@@ -124,6 +124,14 @@ function App() {
                         <p>
                             You are logged in.
                         </p>
+
+                        <button
+                            onClick={() => {
+                                window.location.href = `${apiUrl}/api/auth/Logout`
+                            }}
+                        >
+                            Logout
+                        </button>
                     </header>
 
                     <section className="app-home-section">

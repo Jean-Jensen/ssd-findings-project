@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Application.Models.Constants;
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ public class AuthController : ControllerBase
     public const string LoginRoute = ControllerRoute + nameof(Login);
     public const string CallbackRoute = ControllerRoute + nameof(Callback);
     public const string UserInfoRoute = ControllerRoute + "UserInfo";
+    public const string LogoutRoute = ControllerRoute + nameof(Logout);
 
     
     [HttpGet(LoginRoute)]
@@ -62,6 +64,24 @@ public class AuthController : ControllerBase
         {
             IsAuthenticated = false,
         });
+        
+        
+    }
+    
+    [HttpGet(LogoutRoute)]
+    public async Task Logout([FromServices] IConfiguration config)
+    {
+        var frontendUrl = config["OpenIDConnectSettings:Frontend"];
+
+        await HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        await HttpContext.SignOutAsync(
+            OpenIdConnectDefaults.AuthenticationScheme,
+            new AuthenticationProperties
+            {
+                RedirectUri = frontendUrl
+            });
     }
     
 }
