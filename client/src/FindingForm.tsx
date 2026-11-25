@@ -64,11 +64,19 @@ export default function Findingform(){
     }
     
     async function createFinding(){
-        let finding: FindingDto = createFindingObject();
+        if(severityField != "" && severityField != "Select Severity" 
+            && titleField != "" && assetField != ""
+            && findingDetails != ""){
+            let finding: FindingDto = createFindingObject();
+
+            console.log(finding);
+
+            await findingClient.addFinding(finding);
+        } else {
+            console.log("dont leave any field blank")
+        }
         
-        console.log(finding);
         
-        await findingClient.addFinding(finding);
         
     }
     
