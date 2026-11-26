@@ -117,17 +117,29 @@ function DashboardPage() {
                 <>
                     <section className="dashboard-summary">
                         <article className="dashboard-summary-card">
-                            <span className="dashboard-card-label">
-                                Total Open Findings
-                            </span>
+        <span className="dashboard-card-label">
+            Total Open Findings
+        </span>
                             <strong>{summary?.totalOpen ?? 0}</strong>
                         </article>
 
                         <article className="dashboard-summary-card">
-                            <span className="dashboard-card-label">
-                                Overdue Findings
-                            </span>
+        <span className="dashboard-card-label">
+            Overdue Findings
+        </span>
                             <strong>{summary?.overdue ?? 0}</strong>
+                        </article>
+
+                        <article className="dashboard-summary-card">
+        <span className="dashboard-card-label">
+            Within SLA
+        </span>
+                            <strong>
+                                {Math.max(
+                                    0,
+                                    (summary?.totalOpen ?? 0) - (summary?.overdue ?? 0)
+                                )}
+                            </strong>
                         </article>
                     </section>
 
