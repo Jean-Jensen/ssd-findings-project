@@ -154,3 +154,121 @@
         align-items: flex-start;
     }
 }
+
+.dashboard-export {
+    margin-top: 2rem;
+}
+
+.dashboard-export > p {
+    color: #707070;
+    margin-bottom: 1.5rem;
+}
+
+.report-filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.report-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.report-filters input {
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid #dedede;
+    border-radius: 7px;
+    font: inherit;
+}
+
+.report-export-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.report-export-actions button {
+    padding: 0.65rem 1rem;
+    border: 1px solid #dedede;
+    border-radius: 7px;
+    background: white;
+    color: #252525;
+    cursor: pointer;
+}
+
+.report-export-actions button:hover {
+    background: #f2f2f2;
+}
+
+.report-export-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.report-error {
+    margin-top: 1rem;
+    color: #b42318;
+}
+
+.report-print-area {
+    display: none;
+}
+
+@media (max-width: 650px) {
+    .report-filters {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    @page {
+        margin: 15mm;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .report-print-area,
+    .report-print-area * {
+        visibility: visible;
+    }
+
+    .report-print-area {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: black;
+        font-size: 10pt;
+    }
+
+    .report-print-area h1 {
+        font-size: 20pt;
+    }
+
+    .report-print-area table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+    }
+
+    .report-print-area th,
+    .report-print-area td {
+        padding: 6px;
+        border: 1px solid #999;
+        text-align: left;
+        overflow-wrap: anywhere;
+    }
+
+    .report-print-area tr {
+        break-inside: avoid;
+    }
+}
