@@ -540,6 +540,45 @@ export class DashboardClient {
         }
         return Promise.resolve<DashboardSummary>(null as any);
     }
+
+    getReport(fromDate: Date | null | undefined, toDate: Date | null | undefined, affectedAsset: string | null | undefined): Promise<FindingReportItem[]> {
+        let url_ = this.baseUrl + "/api/dashboard/Report?";
+        if (fromDate !== undefined && fromDate !== null)
+            url_ += "fromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toISOString() : "") + "&";
+        if (toDate !== undefined && toDate !== null)
+            url_ += "toDate=" + encodeURIComponent(toDate ? "" + toDate.toISOString() : "") + "&";
+        if (affectedAsset !== undefined && affectedAsset !== null)
+            url_ += "affectedAsset=" + encodeURIComponent("" + affectedAsset) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetReport(_response);
+        });
+    }
+
+    protected processGetReport(response: Response): Promise<FindingReportItem[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as FindingReportItem[];
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FindingReportItem[]>(null as any);
+    }
 }
 
 export class AuthClient {
@@ -805,6 +844,18 @@ export interface DashboardSummary {
 export interface DashboardCount {
     label?: string;
     count?: number;
+}
+
+export interface FindingReportItem {
+    findingId?: string;
+    title?: string;
+    details?: string;
+    affectedAsset?: string;
+    severity?: string | undefined;
+    status?: string;
+    discoveryDate?: Date;
+    dueDate?: Date | undefined;
+    createdAt?: Date;
 }
 
 export interface UserModel {
